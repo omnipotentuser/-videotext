@@ -2,7 +2,12 @@
     display: block;
 }
 
-#videochat-title-container.h1 {
+#videochat-title-container {
+    display: inline-block;
+    font-size: 1.0em;
+    padding: 5px;
+}
+h1 {
     display: inline-block;
     font-size: 1.0em;
 }
@@ -10,6 +15,7 @@
     margin-left: 20px;
     display: inline-block;
     font-size: 0.7em;
+    margin-bottom: 40px;
 }
 #room-input{
     float: left;

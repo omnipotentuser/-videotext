@@ -4,9 +4,12 @@
  * Module dependencies.
  */
 
+var path = require('path');
 var app = require('../app');
 var debug = require('debug')('registration:server');
 var http = require('http');
+var io = require('socket.io');
+var mcu = require(path.join(__dirname, '../lib/mcu.js'));
 
 /**
  * Get port from environment and store in Express.
@@ -88,3 +91,9 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+/*
+ * Media Controller Unit communicating media data flow
+ */
+
+mcu.init(io(server));
