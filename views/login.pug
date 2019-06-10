@@ -1,0 +1,30 @@
+doctype html
+html
+    head
+        include login_header
+        include script
+    block body
+        p Welcome to the videochat!
+        div.w3-card-4(id="staff-container")
+            header.w3-container.w3-indigo
+                h1="Videochat Login"
+            form#login-form(class="w3-container", action="/login", method="post", style="width:92%;max-width:300px;margin:auto;")
+                .imgcontainer.w3-center
+                    img.avatar(src="https://www.w3schools.com/w3css/img_avatar3.png" alt="Avatar" style="width:100%;opacity:0.85")
+                .w3-container.w3-margin
+                    label(class="w3-text-indigo", for="uname")
+                        b Username
+                    input(id="staff-login", class="w3-input w3-border", type="text" placeholder="Enter Username" name="uname" required="")
+                    label(class="w3-text-indigo", for="psw")
+                        b Password
+                    input(id="staff-pwd", class="w3-input w3-border", type="password", placeholder="Enter Password", name="psw", required="")
+                    button#login-login(class="w3-btn w3-indigo w3-margin-top", type="submit", name="login submit", value="Login Form") Login
+                    label(class="w3-text-indigo w3-margin-top")
+                        input.w3-check.w3-margin-top(type="checkbox" checked="checked" name="remember")
+                        |  Remember me
+                //.w3-container(class="w3-light-gray w3-margin w3-padding")
+                //    button.login-cancel-btn(class="w3-margin-right", type="button") Cancel
+                //    span.psw
+                //        | Forgot 
+                //        a(href="#") password?
+        include login_script

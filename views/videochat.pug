@@ -1,0 +1,16 @@
+doctype html
+html
+    head
+        include videochat_header
+    body
+        #videochat-main
+            #videochat-title-container
+                h1 Videochat
+                #videochat-room-title
+            #videochat-room-input
+                input#roomnameinput(placeholder='Room Name' focus)
+                button#joinroombtn join
+                button#randomgeneratorbtn(title='Randomly generate a room name') auto
+            #videochat-video-container
+        include script
+        include videochat_script
