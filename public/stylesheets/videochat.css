@@ -48,7 +48,7 @@ h1 {
 }
 #videochat-video-container{
     width: 100%;
-    top: 50px;
+    top: 70px;
     bottom: 25px;
     left: 0px;
     position: absolute;
@@ -92,7 +92,7 @@ textarea{
     vertical-align: middle;
 }
 .videochat-btn-clip{
-    width: 45px;
+    width: 95px;
     height: 25px;
     cursor: pointer;
     box-sizing: border-box;

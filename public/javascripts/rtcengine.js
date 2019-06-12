@@ -317,7 +317,9 @@ function RTCEngine(){
 
     function connect(callback) {
 
+        /* callback from handleSocketEvents MVC  */
         appCB = callback;
+
         if(socket){
             console.log('socket reconnecting');
             socket.reconnect();
