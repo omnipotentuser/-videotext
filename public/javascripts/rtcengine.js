@@ -9,7 +9,7 @@ function RTCEngine(){
         , password = null
         , localStream = null
         , localId = null
-        , iceConfig = []
+        , iceConfig = [{urls: "stun:stun.l.google.com:19302"}]
         , appCB = function(){}; // holds the callback from external app
 
     var shiftKeyCode = {'192':'126', '49':'33', '50':'64', '51':'35', '52':'36', '53':'37', '54':'94', '55':'38', '56':'42', '57':'40', '48':'41', '189':'95', '187':'43', '219':'123', '221':'125', '220':'124', '186':'58', '222':'34', '188':'60', '190':'62', '191':'63'};
@@ -55,30 +55,6 @@ function RTCEngine(){
                 socket.disconnect();
             }
         }
-
-        /*
-        navigator.mediaDevices.getUserMedia(
-            media_constraints,
-            function(stream){
-                localStream = stream;
-                var video = $('#local-video');
-                video.attr('src', window.URL.createObjectURL(localStream));
-                localStream.onloadedmetadata = function(e){
-                    console.log('onloadedmetadata called, properties:');
-                    for(var prop in e){
-                        console.log(prop + ' in ' + e[prop]);
-                    }
-                }
-                console.log('joining', roomName);
-                var info = {
-                    room: roomName,
-                    isLocked: isLocked,
-                    password: password
-                };
-                socket.emit('join', info);
-            }
-        );
-        */
     }
 
     function stopMedia(){
