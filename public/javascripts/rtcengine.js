@@ -24,12 +24,9 @@ function RTCEngine(){
             password = data.password;
             console.log('password', password);
         }
-        var media_constraints = {
-            video : {
-                mandatory: {
-                }
-            },
-            audio : true
+        const media_constraints = window.constraints = {
+            video : true
+            , audio : true
         };
 
         // getUserMedia
@@ -37,17 +34,23 @@ function RTCEngine(){
             navigator.mediaDevices.getUserMedia(media_constraints)
             .then(function(stream){
 
+                const videoTracks = stream.getVideoTracks();
+                console.log('Got stream with constraints:', constraints);
+                console.log(`Using video device: ${videoTracks[0].label}`);
+
                 localStream = stream;
-                var video = $('#local-video');
+                window.stream = stream;
+                var video = document.querySelector('#local-video');
+                //var video = $('#local-video');
                 //video.attr('src', window.URL.createObjectURL(localStream));
-                video.srcObject = localStream;
+                video.srcObject = stream;
                 console.log('joining', roomName);
                 var info = {
                     room: roomName
                     , isLocked: isLocked
                     , password: password
                 };
-                socket.emit('join', roomName);
+                socket.emit('join', info);
             })
         } catch(err){
             console.log('getUserMedia error: ', err);
