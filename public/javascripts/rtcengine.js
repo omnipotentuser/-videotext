@@ -1,4 +1,4 @@
-/* globals io:true, Peer:true, getUserMedia:true, logError:true, */
+/* globals io:true, Peer:true, mediaDevices:true, logError:true, */
 
 function RTCEngine(){
     var peers = []
@@ -182,6 +182,8 @@ function RTCEngine(){
         socket.on('createPeers', function(message){
             console.log('socket received createPeers signal');
             var users = message.users;
+            var len = message.len;
+            console.log('handleCreatePeers users:', users);
             if(users.length > 0)
                 createPeers(users, callback);
         });
@@ -228,6 +230,8 @@ function RTCEngine(){
         socket.on('sdp', function (message) {
             console.log('sdp offer received');
             for(var i = 0; i < peers.length; i++) {
+                console.log(`sdp offer for peerid: ${peers[i].getid()}`);
+                console.log(`sdp offer from message.from_id: ${message.from_id}`);
                 if(peers[i].getid() === message.from_id){
                     if(!peers[i].hasPC()){
                         console.log('SDP received: PC not ready. Building.');

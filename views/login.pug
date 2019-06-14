@@ -14,10 +14,10 @@ html
                 .w3-container.w3-margin
                     label(class="w3-text-indigo", for="uname")
                         b Username
-                    input(id="staff-login", class="w3-input w3-border", type="text" placeholder="Enter Username" name="uname" required="")
+                    input(id="staff-login", class="w3-input w3-border", type="text" placeholder="Enter Username" name="uname" required="", autocomplete="uname")
                     label(class="w3-text-indigo", for="psw")
                         b Password
-                    input(id="staff-pwd", class="w3-input w3-border", type="password", placeholder="Enter Password", name="psw", required="")
+                    input(id="staff-pwd", class="w3-input w3-border", type="password", placeholder="Enter Password", name="psw", required, autocomplete="password")
                     button#login-login(class="w3-btn w3-indigo w3-margin-top", type="submit", name="login submit", value="Login Form") Login
                     label(class="w3-text-indigo w3-margin-top")
                         input.w3-check.w3-margin-top(type="checkbox" checked="checked" name="remember")

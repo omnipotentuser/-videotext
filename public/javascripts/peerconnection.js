@@ -1,4 +1,4 @@
-/* globals createIceServer:true, RTCIceCandidate:true, RTCPeerConnection:true, RTCSessionDescription:true */
+/* globals RTCIceCandidate:true, RTCPeerConnection:true, RTCSessionDescription:true */
 
 function logError(error) {
     console.log('error: ' + error.name);
@@ -37,15 +37,17 @@ function Peer(p_socket, p_id, p_roomName, iceConfig) {
     };
 
     this.buildClient = function(stream, bytecharCallback, requestType){
+        /*
         for (var i = 0; i < credentials.length; i++){
             var iceServer = {};
-            iceServer = createIceServer(credentials[i].url,
+            iceServer = RTCPeerConnection.setConfiguration(credentials[i].url,
             credentials[i].username,
             credentials[i].credential);	
             ice_config.iceServers.push(iceServer);
         }
-        pc = new RTCPeerConnection(ice_config);
-        pc.onaddstream = onAddStream;
+        */
+        pc = new RTCPeerConnection(credentials);
+        pc.ontrack = onTrack;
         pc.onicecandidate = onIceCandidate;
         pc.oniceconnectionstatechange = onIceConnectionStateChange;
         pc.onnegotiationneeded = onNegotiationNeeded;
@@ -69,12 +71,7 @@ function Peer(p_socket, p_id, p_roomName, iceConfig) {
             localStream = stream;
 	        pc.addStream(localStream);
         }else{
-            swal({
-                title: 'Media not found!',
-                text:'Please check that your webcam is not being used by some other program and that you have given permission for the browser to access it.',
-                type:'error',
-                confirmButtonText: 'Cool'
-            });
+            window.alert('Media device (camera) not found!');
         }
     };
 
@@ -112,9 +109,9 @@ function Peer(p_socket, p_id, p_roomName, iceConfig) {
     var dataChannelOptions = {
     };
 
-    var onAddStream = function(evt) {
-        console.log('onAddStream '+evt.stream.id);
-        $('#'+peerid).attr('src', window.URL.createObjectURL(evt.stream));
+    var onTrack = function(evt) {
+        console.log('onTrack connecting stream to object: ' + peerid);
+        document.querySelector('#'+peerid).srcObject = evt.streams[0];
     };
 
     var onIceCandidate = function(evt){
@@ -124,7 +121,7 @@ function Peer(p_socket, p_id, p_roomName, iceConfig) {
                 candidate:evt.candidate,
                 to_id: peerid
             };
-            //console.log('sending candidate', message.candidate.candidate);
+            console.log('sending candidate', message.candidate.candidate);
             socket.emit('candidate', message);
         }
     };
@@ -147,7 +144,7 @@ function Peer(p_socket, p_id, p_roomName, iceConfig) {
 
     this.addIceCandidate = function (p_candidate) {
         if(pc){
-	        pc.addIceCandidate(new RTCIceCandidate(p_candidate));
+	        pc.addIceCandidate(p_candidate);
         } else {
 	        console.log('No peer candidate instance');
         }
