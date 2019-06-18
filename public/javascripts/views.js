@@ -27,7 +27,7 @@ function VideochatViews(){
         var wstext = $('<div/>', {class:'videochat-layout-options'})
             .append('<input type="checkbox" class="videochat-input-checkbox-wsmode" value="enable">Use WebSocket</input>');
         $('<div/>', {id:'local-container', class:'media-layout'})
-            .append('<video id=\"local-video\" autoplay controls muted>')
+            .append('<video id=\"local-video\" autoplay playsinline controls muted>')
             .append(clip)
             .append(wstext)
             .append('<textarea id=\"local-ta\" placeholder="Begin typing in real time"></textarea>')
