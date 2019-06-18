@@ -1,15 +1,17 @@
 # videotext
 
 ### reading materials ###
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API">WebRTC API</a>
+
 <a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia">getUserMedia</a>
 
 <a href="https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection/ontrack">Media onTrack</a>
 
-<a href="https://developer.mozilla.org/en-US/docs/Web/API/RTCIceServer/urls">RTCIceServer</a>
-
-<a href="https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API">WebRTC API</a>
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/RTCIceServer">RTCIceServer</a>
 
 <a href="https://webrtchacks.com/guide-to-safari-webrtc/">Guide to Safari WebRTC</a>
+
+<a href="https://guide.meteor.com/mobile.html">Meteor Cordova Integration for Mobile Development</a>
 
 ### usage ###
 This project is a simple, intuitive implementation of a videochat WebRTC app with a login system and psql (although you are free to devise your own database). 
