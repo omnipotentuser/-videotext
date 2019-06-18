@@ -13,6 +13,10 @@
 
 <a href="https://guide.meteor.com/mobile.html">Meteor Cordova Integration for Mobile Development</a>
 
+<a href="https://github.com/BasqueVoIPMafia/cordova-plugin-iosrtc">Cordova IOS plugin</a>
+
+
+
 ### usage ###
 This project is a simple, intuitive implementation of a videochat WebRTC app with a login system and psql (although you are free to devise your own database). 
 
