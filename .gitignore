@@ -11,6 +11,10 @@ pids
 *.seed
 *.pid.lock
 
+# config info
+
+config.js
+
 # vim swap file
 *.swp
 

@@ -41,8 +41,6 @@ function RTCEngine(){
                 localStream = stream;
                 window.stream = stream;
                 var video = document.querySelector('#local-video');
-                //var video = $('#local-video');
-                //video.attr('src', window.URL.createObjectURL(localStream));
                 video.srcObject = stream;
                 console.log('joining', roomName);
                 var info = {
@@ -230,8 +228,8 @@ function RTCEngine(){
         socket.on('sdp', function (message) {
             console.log('sdp offer received');
             for(var i = 0; i < peers.length; i++) {
-                console.log(`sdp offer for peerid: ${peers[i].getid()}`);
-                console.log(`sdp offer from message.from_id: ${message.from_id}`);
+                //console.log(`sdp offer for peerid: ${peers[i].getid()}`);
+                //console.log(`sdp offer from message.from_id: ${message.from_id}`);
                 if(peers[i].getid() === message.from_id){
                     if(!peers[i].hasPC()){
                         console.log('SDP received: PC not ready. Building.');
