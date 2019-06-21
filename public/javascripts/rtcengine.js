@@ -9,8 +9,9 @@ function RTCEngine(){
         , password = null
         , localStream = null
         , localId = null
-        , iceConfig = [{urls: "stun:stun.l.google.com:19302"}]
         , appCB = function(){}; // holds the callback from external app
+
+    let iceConfig = [{urls: "stun:stun.l.google.com:19302"}];
 
     var shiftKeyCode = {'192':'126', '49':'33', '50':'64', '51':'35', '52':'36', '53':'37', '54':'94', '55':'38', '56':'42', '57':'40', '48':'41', '189':'95', '187':'43', '219':'123', '221':'125', '220':'124', '186':'58', '222':'34', '188':'60', '190':'62', '191':'63'};
     var specialCharCode = {'8':'8', '13':'13', '32':'32', '186':'58', '187':'61', '188':'44', '189':'45', '190':'46', '191':'47', '192':'96', '219':'91', '220':'92', '221':'93', '222':'39'};
@@ -181,16 +182,19 @@ function RTCEngine(){
             console.log('socket received createPeers signal');
             var users = message.users;
             var len = message.len;
+
+            var ice = message.ice ? message.ice : iceConfig;
             console.log('handleCreatePeers users:', users);
             if(users.length > 0)
-                createPeers(users, callback);
+                createPeers(users, ice, callback);
         });
     }
 
-    function createPeers(users, callback) {
+    function createPeers(users, ice, callback) {
         var pid = users.shift();
         callback('create', {id:pid});
-        var peer = new Peer(socket, pid, roomName, iceConfig);
+        //console.log('createPeers iceConfig: ', ice);
+        var peer = new Peer(socket, pid, roomName, ice);
         peer.buildClient(localStream, handleByteChar, 'answer');
         peers.push(peer);
         if(users.length > 0){
@@ -201,6 +205,8 @@ function RTCEngine(){
     function handleCreateOffer(socket, callback) {
         if (typeof callback === 'undefined') callback = function(){};
         socket.on('createOffer', function(message){
+            iceConfig = message.ice ? message.ice : iceConfig;
+            //console.log('createOffer iceConfig: ', iceConfig);
             var peer = new Peer(socket, message.id, roomName, iceConfig);
             peer.buildClient(localStream, handleByteChar, 'offer');
             peers.push(peer);
@@ -312,13 +318,17 @@ function RTCEngine(){
         });
     }
 
+    /*
     function handleIceConfig(socket){
         socket.on('iceConfig', function(ice){
+            console.log('iceConfig received: ', ice);
+            console.log('handleIceConfig before updating ice: ', iceConfig);
             if (ice.length > 0){
                 iceConfig = ice; 
             }
         });
     }
+    */
 
     function connect(callback) {
 
@@ -338,7 +348,7 @@ function RTCEngine(){
             handleRoomsSent(socket, callback);
             handleDeleteRoom(socket, callback);
             handleAddRoom(socket, callback);
-            handleJoinRoom(socket,    callback);
+            handleJoinRoom(socket, callback);
             handleCreatePeers(socket, callback);
             handleCreateOffer(socket, callback);
             handleIceCandidate(socket);
@@ -346,7 +356,7 @@ function RTCEngine(){
             handleReceiveCode(socket, callback);
             handleClientDisconnected(socket, callback);
             handleSysCode(socket, callback);
-            handleIceConfig(socket);
+    //        handleIceConfig(socket);
 
             callback('connected');
 
