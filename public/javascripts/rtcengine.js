@@ -198,7 +198,7 @@ function RTCEngine(){
         peer.buildClient(localStream, handleByteChar, 'answer');
         peers.push(peer);
         if(users.length > 0){
-            createPeers(users, callback);
+            createPeers(users, ice, callback);
         }
     }
 
