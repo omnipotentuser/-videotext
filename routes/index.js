@@ -1,6 +1,8 @@
 'use strict';
 var express = require('express');
 var router = express.Router();
+
+
 const { Pool } = require('pg')
 const pool = new Pool({
     user: 'nick',
@@ -11,7 +13,7 @@ const pool = new Pool({
 })
 
 
-// GUARDIAN REGISTRATION SECTION
+// EXAMPLE REGISTRATION SECTION
 
 router.post('/register', function(req, res, next) {
     console.log('/REGISTER request');
@@ -199,5 +201,24 @@ router.get('/videochat', function(req, res, next) {
         res.redirect('/login');
     }
 });
+
+
+// LOGIN-FREE videotext
+router.get('/vc', function(req, res, next) {
+    console.log('requesting member-free videochat');
+    console.log('rendering videochat');
+    res.render('videochat');
+});
+
+// LOGIN-FREE videophone
+router.get('/vp', function(req, res, next) {
+    console.log('requesting member-free videophone');
+    console.log('rendering videophone');
+    res.render('videophone');
+});
+router.get('/vpexit', function(req, res, next) {
+    res.redirect("/vp");
+});
+
 
 module.exports = router;
