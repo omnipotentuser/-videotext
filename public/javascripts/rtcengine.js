@@ -193,7 +193,7 @@ function RTCEngine(){
     function createPeers(users, ice, callback) {
         var pid = users.shift();
         callback('create', {id:pid});
-        //console.log('createPeers iceConfig: ', ice);
+        console.log('createPeers iceConfig: ', ice);
         var peer = new Peer(socket, pid, roomName, ice);
         peer.buildClient(localStream, handleByteChar, 'answer');
         peers.push(peer);
@@ -206,7 +206,7 @@ function RTCEngine(){
         if (typeof callback === 'undefined') callback = function(){};
         socket.on('createOffer', function(message){
             iceConfig = message.ice ? message.ice : iceConfig;
-            //console.log('createOffer iceConfig: ', iceConfig);
+            console.log('createOffer iceConfig: ', iceConfig);
             var peer = new Peer(socket, message.id, roomName, iceConfig);
             peer.buildClient(localStream, handleByteChar, 'offer');
             peers.push(peer);

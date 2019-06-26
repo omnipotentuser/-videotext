@@ -13,13 +13,16 @@ function Peer(p_socket, p_id, p_roomName, iceConfig) {
         socket = p_socket,
         localStream = null,
         roomName = p_roomName,
-        ice_config = {iceServers:[]},
+        //ice_config = {iceServers:[iceConfig]},
+       	ice_config = {iceServers:[iceConfig], iceTransportPolicy: "relay"},
         credentials = [];
 
-    if (iceConfig.length > 0){
+    console.log('Peer() ice_config: ', ice_config);
+    if (ice_config){
         //console.log('choosing turn server from post');
-        credentials = iceConfig;
+        credentials = ice_config;
     } else {
+	console.log('WARNING: ICE Config empty');
         credentials = [{}] /* empty ICE config */
     }
 
@@ -46,6 +49,8 @@ function Peer(p_socket, p_id, p_roomName, iceConfig) {
             ice_config.iceServers.push(iceServer);
         }
         */
+	console.log('buildClient: ice config - ', credentials);
+        //pc = new RTCPeerConnection({iceServers: credentials, iceTransportPolicy: "relay"});
         pc = new RTCPeerConnection(credentials);
         pc.ontrack = onTrack;
         pc.onicecandidate = onIceCandidate;
@@ -110,8 +115,16 @@ function Peer(p_socket, p_id, p_roomName, iceConfig) {
     };
 
     var onTrack = function(evt) {
-        console.log('onTrack connecting stream to object: ' + peerid);
-        document.querySelector('#'+peerid).srcObject = evt.streams[0];
+	let remoteVideoDom = document.querySelector('#'+peerid);
+	console.log('remoteVideoDom: ', typeof remoteVideoDom);
+	if (remoteVideoDom){
+	    console.log('onTrack connecting stream to object: ' + peerid);
+	    remoteVideoDom.srcObject = evt.streams[0];
+	} else {
+            setTimeout(function(){
+		onTrack(evt);
+	    }, 200);
+	}
     };
 
     var onIceCandidate = function(evt){
