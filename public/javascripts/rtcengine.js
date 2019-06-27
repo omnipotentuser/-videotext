@@ -187,6 +187,7 @@ function RTCEngine(){
             console.log('handleCreatePeers users:', users);
             if(users.length > 0)
                 createPeers(users, ice, callback);
+            socket.emit('broadcastJoin', {room:roomName});
         });
     }
 

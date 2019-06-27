@@ -16,25 +16,6 @@ $(document).ready(function(){
             switch (signaler) {
                 case 'connected':
                     console.log('rtc engine connected');
-
-                    /*
-                    $.post("https://api.xirsys.com/getIceServers",{
-                        ident:"openhack",
-                        secret:"7ba03da6-d79b-11e5-83d0-057edf23e1c6",
-                        domain:"openhack.net",
-                        application:"default",
-                        room:"default",
-                        secure: "1"
-                    },
-                    function(data, status){
-                        var icedata = JSON.parse(data);
-                        //console.log('ice obtained:',icedata.d.iceServers);
-                        if (status === "success"){
-                            console.log('post success');
-                            rtc_engine.join({room:roomName});
-                        }
-                    });
-                    */
                     rtc_engine.join({room:roomName});
                     break;
                 case 'id':

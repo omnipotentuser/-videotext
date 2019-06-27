@@ -13,8 +13,8 @@ function Peer(p_socket, p_id, p_roomName, iceConfig) {
         socket = p_socket,
         localStream = null,
         roomName = p_roomName,
-        //ice_config = {iceServers:[iceConfig]},
-       	ice_config = {iceServers:[iceConfig], iceTransportPolicy: "relay"},
+        ice_config = {iceServers:[iceConfig]},
+       	//ice_config = {iceServers:[iceConfig], iceTransportPolicy: "relay"},
         credentials = [];
 
     console.log('Peer() ice_config: ', ice_config);
@@ -40,17 +40,7 @@ function Peer(p_socket, p_id, p_roomName, iceConfig) {
     };
 
     this.buildClient = function(stream, bytecharCallback, requestType){
-        /*
-        for (var i = 0; i < credentials.length; i++){
-            var iceServer = {};
-            iceServer = RTCPeerConnection.setConfiguration(credentials[i].url,
-            credentials[i].username,
-            credentials[i].credential);	
-            ice_config.iceServers.push(iceServer);
-        }
-        */
 	console.log('buildClient: ice config - ', credentials);
-        //pc = new RTCPeerConnection({iceServers: credentials, iceTransportPolicy: "relay"});
         pc = new RTCPeerConnection(credentials);
         pc.ontrack = onTrack;
         pc.onicecandidate = onIceCandidate;
@@ -115,16 +105,9 @@ function Peer(p_socket, p_id, p_roomName, iceConfig) {
     };
 
     var onTrack = function(evt) {
+        console.log('onTrack connecting stream to object: ' + peerid);
 	let remoteVideoDom = document.querySelector('#'+peerid);
-	console.log('remoteVideoDom: ', typeof remoteVideoDom);
-	if (remoteVideoDom){
-	    console.log('onTrack connecting stream to object: ' + peerid);
-	    remoteVideoDom.srcObject = evt.streams[0];
-	} else {
-            setTimeout(function(){
-		onTrack(evt);
-	    }, 200);
-	}
+        remoteVideoDom.srcObject = evt.streams[0];
     };
 
     var onIceCandidate = function(evt){

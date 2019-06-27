@@ -23,3 +23,8 @@ This project is a simple, intuitive implementation of a videochat WebRTC app wit
 Each party layout with the local video and all peers (remote) comes with text box below each video. In your local video, begin typing in the textbox and the characters will be sent REAL TIME to all other users end where your video appears.
 
 Pasting a string of words to be sent to peers will not work where you normally would text type. To send a block or string of characters at once, you need to use the *paste clipboard* textbox.
+
+### issues ###
+if your osx camera breaks programmatically, kill it doing this:
+
+`sudo killall VDCAssistant`
