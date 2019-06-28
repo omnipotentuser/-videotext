@@ -1,6 +1,7 @@
 'use strict';
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+const util = require('util');
 
 
 const { Pool } = require('pg')
@@ -11,7 +12,7 @@ const pool = new Pool({
     password: 'nobis',
     port: 5432
 })
-
+const query = util.promisify(pool.query).bind(pool);
 
 // EXAMPLE REGISTRATION SECTION
 
@@ -52,35 +53,24 @@ router.post('/register', function(req, res, next) {
         }
     });
 
-    var allergy = "INSERT INTO allergies (lactose, peanuts, penicillin, latex) VALUES ($1, $2, $3, $4) RETURNING id";
-    var gender = "INSERT INTO gender (code) VALUES ($1) ON CONFLICT DO NOTHING RETURNING id";
-    var register = "INSERT INTO registrant (guardian_first_name, guardian_last_name, student_first_name, student_last_name, allergies_id, gender_id) VALUES ($1, $2, $3, $4, $5, $6) ON CONFLICT DO NOTHING";
+    (async () => {
 
-    var allergy_id, gender_id;
-    pool.query(allergy, allergyarray, (error, results) => {
-        if (error) {
-            throw error;
-            res.send({msg: "error"});
-        } else {
+        var allergy = "INSERT INTO allergies (lactose, peanuts, penicillin, latex) VALUES ($1, $2, $3, $4) RETURNING id";
+        var gender = "INSERT INTO gender (code) VALUES ($1) ON CONFLICT DO NOTHING RETURNING id";
+        var register = "INSERT INTO registrant (guardian_first_name, guardian_last_name, student_first_name, student_last_name, allergies_id, gender_id) VALUES ($1, $2, $3, $4, $5, $6) ON CONFLICT DO NOTHING";
+
+        var allergy_id, gender_id;
+        try {
+            let results = await query(allergy, allergyarray);
             //console.log('allergy query results: ', results);
             //console.log('allergy query results id: ', results.rows[0].id);
             allergy_id = results.rows[0].id;
-            pool.query(gender, [regform.gender], (error, results) => {
-                if (error){
-                    throw error;
-                    res.send({msg: "error"});
-                } else {
-                    gender_id = results.rows[0].id;
-                    pool.query(register, [regform.gfn, regform.gln, regform.cfn, regform.cln, allergy_id, gender_id], (error, results) => {
-                        if (error){
-                            throw error;
-                            res.send({msg: "error"});
-                        } else {
-                            res.send({msg: "success"});
-                        }
-                    });
-                }
-            });
+            results = await query(gender, [regform.gender]);
+            gender_id = results.rows[0].id;
+            results = await query(register, [regform.gfn, regform.gln, regform.cfn, regform.cln, allergy_id, gender_id]);
+            res.send({msg: "success"});
+        } catch (err) {
+            res.send({msg: "error"});
         }
     })
 
@@ -119,15 +109,6 @@ var sha512 = function(password, salt){
 var salted = genRandomString(16);
 var hashedpw = sha512('nick', salted);
 var addUserParam = ['nick', hashedpw.passwordHash, salted];
-
-var addUser = 'INSERT INTO users (name, psw_hash, salt) VALUES ($1, $2, $3) ON CONFLICT DO NOTHING';
-
-pool.query(addUser, addUserParam, (error, results) => {
-    if (error){
-        throw error;
-    }
-    console.log('create default user: ', results);
-});
 
 // example of getting salt and hash
 function saltHashPassword(userpw){

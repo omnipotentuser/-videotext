@@ -35,16 +35,13 @@ let hashedPW = sha512('nick', salted);
 let addUserParam = ['nick', hashedPW, salted];
 
 
-(async function addUserDB(){
+async function addUserDB(){
     let addUser = 'INSERT INTO users (name, psw_hash, salt) VALUES ($1, $2, $3) ON CONFLICT DO NOTHING';
-    let result;
     try {
-        result = await query(addUser, addUserParam)
+        const result  = await query(addUser, addUserParam);
         console.log('create default user: ', result);
-        return;
     } catch(e) {
         console.log('addUserDB query failed');
-        return;
     }
     /*
     try {
@@ -53,4 +50,7 @@ let addUserParam = ['nick', hashedPW, salted];
         return null;
     }
     */
-})()
+    pool.end();
+}
+
+addUserDB();
