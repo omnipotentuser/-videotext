@@ -224,7 +224,7 @@ function RTCEngine(){
                         console.log('ICE Candidate received: PC not ready. Building.');
                         peers[i].buildClient(localStream, handleByteChar, 'answer');
                     }
-                    //console.log('Remote ICE candidate',message.candidate.candidate);
+                    console.log('Remote ICE candidate',message.candidate.candidate);
                     peers[i].addIceCandidate(message.candidate);
                 }
             }

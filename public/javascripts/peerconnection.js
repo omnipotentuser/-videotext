@@ -17,6 +17,8 @@ function Peer(p_socket, p_id, p_roomName, iceConfig) {
        	//ice_config = {iceServers:[iceConfig], iceTransportPolicy: "relay"},
         credentials = [];
 
+    var policy = location.search.split('policy=')[1] ? location.search.split('policy=')[1] : "";
+    console.log('Have ICE transport policy? ', policy);
     console.log('Peer() ice_config: ', ice_config);
     if (ice_config){
         //console.log('choosing turn server from post');
@@ -111,14 +113,32 @@ function Peer(p_socket, p_id, p_roomName, iceConfig) {
     };
 
     var onIceCandidate = function(evt){
-        if (evt.candidate){
-            var message = {
-                room: roomName,
-                candidate:evt.candidate,
-                to_id: peerid
-            };
-            console.log('sending candidate', message.candidate.candidate);
-            socket.emit('candidate', message);
+
+        var cand = evt.candidate;
+        if(!cand) return;
+
+        if (cand){
+            if (typeof policy != "undefined" && policy != null && policy != ""){
+                if(cand.candidate.indexOf('typ relay') == -1){
+                    console.log('omitting: ', cand.candidate);
+                } else {
+                    var message = {
+                        room: roomName,
+                        candidate:cand,
+                        to_id: peerid
+                    };
+                    console.log('sending candidate', message.candidate.candidate);
+                    socket.emit('candidate', message);
+                }
+            } else {
+                var message = {
+                    room: roomName,
+                    candidate:cand,
+                    to_id: peerid
+                };
+                console.log('sending candidate', message.candidate.candidate);
+                socket.emit('candidate', message);
+            }
         }
     };
 
