@@ -7,7 +7,7 @@ $(document).ready(function(){
     var roomName = '';
     var $input = $('#roomnameinput');
     var joinRoomBtn = $('#joinroombtn');
-    var exitRoomBtn = $('#exitchat');
+    var exitRoom = $('#local-video');
     var randGenBtn = $('#randomgeneratorbtn');
 
     var handleSocketEvents = function(signaler, data){
@@ -64,11 +64,9 @@ $(document).ready(function(){
                 engine.connect(handleSocketEvents);
             })(roomName, rtc_engine);
 
-            videochatViews.updateTitle(roomName);
             window.history.replaceState({}, "OpenStream "+roomName, "#"+roomName);
             joinRoomBtn.unbind('click', handleJoinBtn);
             randGenBtn.unbind('click', handleRandGenBtn);
-            exitRoomBtn.show();
         }
     };
 
@@ -97,7 +95,7 @@ $(document).ready(function(){
     };
 
     joinRoomBtn.bind('click', handleJoinBtn);
-    exitRoomBtn.bind('click', handleExitBtn);
+    exitRoom.bind('click', handleExitBtn);
     randGenBtn.bind('click', handleRandGenBtn);
 
     videochatViews.setListeners(rtc_engine);

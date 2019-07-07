@@ -58,9 +58,5 @@ function VideochatViews(){
         $('#videochat-video-container').empty(); 
     }
 
-    this.updateTitle = function(room){
-        $('#videochat-room-title').append('<p>Room: '+room+'</p>');
-    }
-
     initialize();
 }
