@@ -27,7 +27,9 @@ $(document).ready(function(){
                         'creating new media element', 
                         pid
                     );
-                    videochatViews.appendPeerMedia(pid);
+                    var created = videochatViews.appendPeerMedia(pid);
+                    console.log('******* Was peer created?', created);
+                    return created;
                     break;
                 case 'peerDisconnect':
                     pid = data.id;

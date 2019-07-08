@@ -1,5 +1,6 @@
 function VideochatViews(){
 
+    var totalMediaCount = 0;
     var initialize = function(){
 
         $('<div/>', {id:'local-container', class:'media-layout'})
@@ -21,8 +22,11 @@ function VideochatViews(){
     };
 
     this.openMediaViews = function(){
+        totalMediaCount++;
         $('#videochat-room-input').css('display','none');
-        $('#videochat-video-container').css('display','inline-block');
+        $('#videochat-video-container').css('display','grid');
+        $('#videochat-video-container').css('grid-template-columns','1fr');
+        $('#videochat-video-container').css('grid-template-rows','1fr');
     };
 
     this.closeMediaViews = function(){
@@ -38,23 +42,70 @@ function VideochatViews(){
 
     this.appendPeerMedia = function(pid){
         console.log('appendPeerMedia', pid);
-        $('<div/>', {class:'media-layout'})
+        //var $ml = $('.media-layout');
+        //var percent = (100 / $ml.length);
+        //$ml.css('width',percent+'%');
+
+        totalMediaCount++;
+        if (totalMediaCount > 4) return false;
+
+        $("<div>", {class: 'media-layout'})
             .append('<video id="'+pid+'" autoplay controls>')
             .appendTo('#videochat-video-container');
-        var $ml = $('.media-layout');
-        var percent = (100 / $ml.length);
-        $ml.css('width',percent+'%');
+        var colSize, rowSize;
+        if (totalMediaCount == 2){
+            colSize = "1fr 1fr";
+            rowSize = "1fr";
+            $('video').css('height','100vh');
+        } else if (totalMediaCount == 3){
+            colSize = "1fr 1fr 1fr";
+            rowSize = "1fr";
+            $('video').css('height','100vh');
+        } else if (totalMediaCount == 4){
+            colSize = "1fr 1fr";
+            rowSize = "1fr 1fr";
+            $('video').css('height','50vh');
+        } else {
+            colSize = "1fr";
+            rowSize = "1fr";
+            $('video').css('height','100vh');
+        }
+        $('#videochat-video-container').css('grid-template-columns',colSize);
+        $('#videochat-video-container').css('grid-template-rows',rowSize);
+        return true;
     }
 
     this.deletePeerMedia = function(pid){
         $('#'+pid).parent().remove();
-        var $ml = $('.media-layout');
-        var percent = (100 / $ml.length);
-        $ml.css('width',percent+'%');
+        //var $ml = $('.media-layout');
+        //var percent = (100 / $ml.length);
+        //$ml.css('width',percent+'%');
+        totalMediaCount--;
+        var colSize, rowSize;
+        if (totalMediaCount == 1){
+            colSize = "1fr";
+            rowSize = "1fr";
+            $('video').css('height','100vh');
+        } else if (totalMediaCount == 2){
+            colSize = "1fr 1fr";
+            rowSize = "1fr";
+            $('video').css('height','100vh');
+        } else if (totalMediaCount == 3){
+            colSize = "1fr 1fr 1fr";
+            rowSize = "1fr";
+            $('video').css('height','100vh');
+        } else {
+            colSize = "1fr 1fr";
+            rowSize = "1fr 1fr";
+            $('video').css('height','50vh');
+        }
+        $('#videochat-video-container').css('grid-template-columns',colSize);
+        $('#videochat-video-container').css('grid-template-rows',rowSize);
         console.log('deletePeerMedia', pid);
     }
 
     this.deleteAllMedia = function(){
+        totalMediaCount = 0;
         $('#videochat-video-container').empty(); 
     }
 

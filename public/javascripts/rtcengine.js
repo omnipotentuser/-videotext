@@ -193,13 +193,20 @@ function RTCEngine(){
 
     function createPeers(users, ice, callback) {
         var pid = users.shift();
-        callback('create', {id:pid});
-        console.log('createPeers iceConfig: ', ice);
-        var peer = new Peer(socket, pid, roomName, ice);
-        peer.buildClient(localStream, handleByteChar, 'answer');
-        peers.push(peer);
-        if(users.length > 0){
-            createPeers(users, ice, callback);
+        console.log('Shifting to next peer.');
+        if(callback('create', {id:pid})){
+            console.log('createPeers iceConfig: ', ice);
+            var peer = new Peer(socket, pid, roomName, ice);
+            peer.buildClient(localStream, handleByteChar, 'answer');
+            peers.push(peer);
+            if(users.length > 0){
+                createPeers(users, ice, callback);
+            }
+        } else {
+            console.log('createPeers failed to add new peer.'); 
+            if(users.length > 0){
+                createPeers(users, ice, callback);
+            }
         }
     }
 
