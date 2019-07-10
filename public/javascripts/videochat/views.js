@@ -123,6 +123,7 @@ function VideochatViews(){
         var $ml = $('.media-layout');
         var percent = (100 / $ml.length);
         $ml.css('width',percent+'%');
+        return true;
     }
 
     this.deletePeerMedia = function(pid){
