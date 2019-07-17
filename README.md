@@ -30,7 +30,7 @@ Pasting a string of words to be sent to peers will not work where you normally w
 
 * Up to 4-Way Video+Audio connection meshed
 
-* ACD support for Customer Support
+* ACD for Customer Support
 
 * Streaming Speech-to-text transcriber
 
@@ -38,6 +38,9 @@ Pasting a string of words to be sent to peers will not work where you normally w
 
 * text-to-text translation
 
+* CSS GRID
+
+* Modularity embedded in any website page
 
 ### issues ###
 if your osx internal camera hangs:
