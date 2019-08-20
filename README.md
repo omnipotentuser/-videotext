@@ -15,6 +15,8 @@
 
 <a href="https://github.com/BasqueVoIPMafia/cordova-plugin-iosrtc">Cordova IOS plugin</a>
 
+<a href="https://cloud.google.com/speech-to-text/docs/">Speech-to-text</a>
+
 
 
 ### usage ###
@@ -24,7 +26,23 @@ Each party layout with the local video and all peers (remote) comes with text bo
 
 Pasting a string of words to be sent to peers will not work where you normally would text type. To send a block or string of characters at once, you need to use the *paste clipboard* textbox.
 
+### planned ###
+
+* Up to 4-Way Video+Audio connection meshed
+
+* ACD for Customer Support
+
+* Streaming Speech-to-text transcriber
+
+* text-to-speech transcribing
+
+* text-to-text translation
+
+* CSS GRID
+
+* Modularity embedded in any website page
+
 ### issues ###
-if your osx camera breaks programmatically, kill it doing this:
+if your osx internal camera hangs:
 
 `sudo killall VDCAssistant`
