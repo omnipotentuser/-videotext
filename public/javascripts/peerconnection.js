@@ -108,7 +108,7 @@ function Peer(p_socket, p_id, p_roomName, iceConfig) {
 
     var onTrack = function(evt) {
         console.log('onTrack connecting stream to object: ' + peerid);
-	let remoteVideoDom = document.querySelector('#'+peerid);
+        let remoteVideoDom = document.querySelector('#'+peerid);
         remoteVideoDom.srcObject = evt.streams[0];
     };
 
@@ -118,7 +118,7 @@ function Peer(p_socket, p_id, p_roomName, iceConfig) {
         if(!cand) return;
 
         if (cand){
-            if (typeof policy != "undefined" && policy != null && policy != ""){
+            if (typeof policy != "undefined" && policy != null && policy == "relay"){
                 if(cand.candidate.indexOf('typ relay') == -1){
                     console.log('omitting: ', cand.candidate);
                 } else {
