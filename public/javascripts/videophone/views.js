@@ -50,7 +50,7 @@ function VideochatViews(){
         if (totalMediaCount > 4) return false;
 
         $("<div>", {class: 'media-layout'})
-            .append('<video id="'+pid+'" autoplay controls>')
+            .append('<video id="v'+pid+'" autoplay controls>')
             .appendTo('#videochat-video-container');
         var colSize, rowSize;
         if (totalMediaCount == 2){
@@ -76,7 +76,7 @@ function VideochatViews(){
     }
 
     this.deletePeerMedia = function(pid){
-        $('#'+pid).parent().remove();
+        $('#v'+pid).parent().remove();
         //var $ml = $('.media-layout');
         //var percent = (100 / $ml.length);
         //$ml.css('width',percent+'%');

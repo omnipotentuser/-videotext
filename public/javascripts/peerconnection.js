@@ -108,7 +108,7 @@ function Peer(p_socket, p_id, p_roomName, iceConfig) {
 
     var onTrack = function(evt) {
         console.log('onTrack connecting stream to object: ' + peerid);
-        let remoteVideoDom = document.querySelector('#'+peerid);
+        let remoteVideoDom = document.querySelector('#v'+peerid);
         remoteVideoDom.srcObject = evt.streams[0];
     };
 
@@ -170,12 +170,12 @@ function Peer(p_socket, p_id, p_roomName, iceConfig) {
         if(pc.signalingState === 'closed')
 	        return;
         pc.setLocalDescription(desc, function() {
-	        var message = {
+            var message = {
                 room: roomName,
                 sdp: pc.localDescription,
                 to_id: peerid
-	        };
-	        socket.emit('sdp', message)
+            };
+            socket.emit('sdp', message)
         }, logError);
     };
 

@@ -115,10 +115,10 @@ function VideochatViews(){
         var options = $('<div/>', {class:'videochat-layout-options'})
             .append('<label class="videochat-label-bitrate">Bitrate: Not implemented yet.</label>');
         $('<div/>', {class:'media-layout'})
-            .append('<video id="'+pid+'" autoplay controls>')
+            .append('<video id="v'+pid+'" autoplay controls>')
             .append(options)
             .append('<div class="videochat-layout-options"/>')
-            .append('<textarea id="'+pid+'-ta" class="remote-textarea" readonly></textarea>')
+            .append('<textarea id="ta-'+pid+'" class="remote-textarea" readonly></textarea>')
             .appendTo('#videochat-video-container');
         var $ml = $('.media-layout');
         var percent = (100 / $ml.length);
@@ -127,7 +127,7 @@ function VideochatViews(){
     }
 
     this.deletePeerMedia = function(pid){
-        $('#'+pid).parent().remove();
+        $('#v'+pid).parent().remove();
         var $ml = $('.media-layout');
         var percent = (100 / $ml.length);
         $ml.css('width',percent+'%');
@@ -139,7 +139,7 @@ function VideochatViews(){
     }
 
     this.updateTextArea = function(pid, bytechar){
-        var $ta = $('#'+pid+'-ta');
+        var $ta = $('#ta-'+pid);
         if (bytechar.length > 3){
             $ta.val( $ta.val() + '\n' + bytechar + '\n');
         } else if (bytechar === '8'){
