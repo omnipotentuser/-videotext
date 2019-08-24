@@ -120,14 +120,14 @@ function Peer(p_socket, p_id, p_roomName, iceConfig) {
         if (cand){
             if (typeof policy != "undefined" && policy != null && policy == "relay"){
                 if(cand.candidate.indexOf('typ relay') == -1){
-                    console.log('omitting: ', cand.candidate);
+                    console.log('omitting candidate: ', cand.candidate);
                 } else {
                     var message = {
                         room: roomName,
                         candidate:cand,
                         to_id: peerid
                     };
-                    console.log('sending candidate', message.candidate.candidate);
+                    console.log('sending candidate: ', message.candidate.candidate);
                     socket.emit('candidate', message);
                 }
             } else {

@@ -9,6 +9,7 @@ function RTCEngine(){
         , password = null
         , localStream = null
         , localId = null
+        , stunOn = true
         , appCB = function(){}; // holds the callback from external app
 
     let iceConfig = [{urls: "stun:stun.l.google.com:19302"}];
@@ -46,6 +47,7 @@ function RTCEngine(){
                 console.log('joining', roomName);
                 var info = {
                     room: roomName
+                    , stunOn: stunOn
                     , isLocked: isLocked
                     , password: password
                 };
@@ -187,11 +189,11 @@ function RTCEngine(){
             console.log('handleCreatePeers users:', users);
             if(users.length > 0)
                 createPeers(users, ice, callback);
-            socket.emit('broadcastJoin', {room:roomName});
+            socket.emit('broadcastJoin', {room:roomName, stunOn: stunOn});
         });
     }
 
-    function createPeers(users, ice, callback) {
+    async function createPeers(users, ice, callback) {
         var pid = users.shift();
         console.log('Shifting to next peer.');
         if(callback('create', {id:pid})){

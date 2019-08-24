@@ -1,6 +1,12 @@
 # videotext
 
 ### reading materials ###
+<a href="https://test.webrtc.org">Test Configs</a>
+
+<a href="https://webrtc.github.io/samples/src/content/peerconnection/trickle-ice/">Trickle-ICE test</a>
+
+<a href="https://webrtc.github.io/samples/src/content/peerconnection/trickle-ice/">Trickle-ICE test</a>
+
 <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API">WebRTC API</a>
 
 <a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia">getUserMedia</a>
