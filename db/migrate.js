@@ -1,7 +1,7 @@
-require('createtables.js')();
-require('populatetables.js')();
+const {promisify} = require('util');
+require('./createtables.js')();
+//require('./populatetables.js')();
 
-const util = require('util');
 const { Pool } = require('pg');
 const pool = new Pool({
     user: 'nick',
@@ -11,9 +11,9 @@ const pool = new Pool({
     port: 5432
 });
 
-const query = util.promisfy(pool.query).bind(pool);
+const query = promisify(pool.query).bind(pool);
 
-create_all(query);
-populate_all(query);
+createAll(query);
+//populate_all(query);
 
 pool.end();

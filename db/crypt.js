@@ -1,5 +1,3 @@
-const util = require('util');
-
 let crypto = require('crypto');
 // example of getting salt and hash
 
@@ -20,7 +18,7 @@ module.exports = function(){
         };
     };
 
-    this.saltHashPassword = function(userpw){
+    this.saltHashPassword = async function(userpw){
         let salt = await genRandomString(16);
         let pwData = await sha512(usrpw, salt);
     };
