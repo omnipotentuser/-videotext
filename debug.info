@@ -1,0 +1,32 @@
+views.js:21 set views listeners
+shell.js:117 roomName n
+shell.js:65 starting rtc engine
+rtcengine.js:350 creating new socket connection
+rtcengine.js:354 socket connected
+shell.js:18 rtc engine connected
+rtcengine.js:39 Got stream with constraints: Object
+rtcengine.js:40 Using video device: FaceTime HD Camera (05ac:8514)
+rtcengine.js:46 joining n
+rtcengine.js:166 localId: ZQGVedkwEKWo0_otAAAS
+rtcengine.js:182 socket received createPeers signal
+rtcengine.js:187 handleCreatePeers users: Array(0)length: 0__proto__: Array(0)
+rtcengine.js:196 Shifting to next peer.
+shell.js:26 creating new media element 590uaU-HDNPB2DQBAAAR
+views.js:44 appendPeerMedia 590uaU-HDNPB2DQBAAAR
+shell.js:31 ******* Was peer created? true
+rtcengine.js:198 createPeers iceConfig:  Objectcredential: "5c83e33a-c556-11e9-941b-12339b8f6738"urls: Array(6)0: "turn:ws-turn1.xirsys.com:80?transport=udp"1: "turn:ws-turn1.xirsys.com:3478?transport=udp"2: "turn:ws-turn1.xirsys.com:80?transport=tcp"3: "turn:ws-turn1.xirsys.com:3478?transport=tcp"4: "turns:ws-turn1.xirsys.com:443?transport=tcp"5: "turns:ws-turn1.xirsys.com:5349?transport=tcp"length: 6__proto__: Array(0)username: "73GPUDgrs792h8sDuYzaEJenN_VHfpB4EYva8zuTseicg-GsZrszz7O9HW3rNzObAAAAAF1fXdhib3Zhdg=="__proto__: Object
+peerconnection.js:21 Have ICE transport policy?  relay
+peerconnection.js:22 Peer() ice_config:  ObjecticeServers: Array(1)0: credential: "5c83e33a-c556-11e9-941b-12339b8f6738"urls: Array(6)0: "turn:ws-turn1.xirsys.com:80?transport=udp"1: "turn:ws-turn1.xirsys.com:3478?transport=udp"2: "turn:ws-turn1.xirsys.com:80?transport=tcp"3: "turn:ws-turn1.xirsys.com:3478?transport=tcp"4: "turns:ws-turn1.xirsys.com:443?transport=tcp"5: "turns:ws-turn1.xirsys.com:5349?transport=tcp"length: 6__proto__: Array(0)username: "73GPUDgrs792h8sDuYzaEJenN_VHfpB4EYva8zuTseicg-GsZrszz7O9HW3rNzObAAAAAF1fXdhib3Zhdg=="__proto__: Objectlength: 1__proto__: Array(0)__proto__: Object
+peerconnection.js:45 buildClient: ice config -  ObjecticeServers: Array(1)0: credential: "5c83e33a-c556-11e9-941b-12339b8f6738"urls: Array(6)0: "turn:ws-turn1.xirsys.com:80?transport=udp"1: "turn:ws-turn1.xirsys.com:3478?transport=udp"2: "turn:ws-turn1.xirsys.com:80?transport=tcp"3: "turn:ws-turn1.xirsys.com:3478?transport=tcp"4: "turns:ws-turn1.xirsys.com:443?transport=tcp"5: "turns:ws-turn1.xirsys.com:5349?transport=tcp"length: 6__proto__: Array(0)username: "73GPUDgrs792h8sDuYzaEJenN_VHfpB4EYva8zuTseicg-GsZrszz7O9HW3rNzObAAAAAF1fXdhib3Zhdg=="__proto__: Objectlength: 1__proto__: Array(0)__proto__: Object
+peerconnection.js:62 DataChannel - listening
+peerconnection.js:150 onNegotiationNeeded
+rtcengine.js:243 sdp offer received
+peerconnection.js:202 setRemoteDescription signalingState stable
+2peerconnection.js:110 onTrack connecting stream to object: 590uaU-HDNPB2DQBAAAR
+peerconnection.js:158 onSignalingStateChange: have-remote-offer
+peerconnection.js:205 createAnswer to remote sdp offer
+peerconnection.js:158 onSignalingStateChange: stable
+peerconnection.js:123 omitting:  candidate:1155085727 1 udp 2113937151 10.2.30.22 62724 typ host generation 0 ufrag mtBa network-cost 999
+peerconnection.js:123 omitting:  candidate:1127405908 1 udp 2113939711 2605:6000:eb43:27f0:306c:3f1c:bf44:3793 62725 typ host generation 0 ufrag mtBa network-cost 999
+peerconnection.js:123 omitting:  candidate:842163049 1 udp 1677729535 168.39.129.18 48428 typ srflx raddr 10.2.30.22 rport 62724 generation 0 ufrag mtBa network-cost 999
+peerconnection.js:123 omitting:  candidate:842163049 1 udp 1677729535 168.39.129.18 39693 typ srflx raddr 10.2.30.22 rport 62724 generation 0 ufrag mtBa network-cost 999

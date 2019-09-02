@@ -14,6 +14,6 @@ const pool = new Pool({
 const query = promisify(pool.query).bind(pool);
 
 createAll(query);
-//populate_all(query);
+//populateAll(query);
 
 pool.end();
