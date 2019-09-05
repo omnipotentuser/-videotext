@@ -13,7 +13,8 @@ const pool = new Pool({
 
 const query = promisify(pool.query).bind(pool);
 
-createAll(query);
+//createAll(query);
+dropAll(query);
 //populateAll(query);
 
 pool.end();
