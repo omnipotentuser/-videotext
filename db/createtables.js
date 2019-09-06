@@ -3,33 +3,33 @@ require('./crypt.js')();
 module.exports = function(){
 
     this.createAll = async function(query){
-        createCodesTable(query);
-        createServicesTable(query);
-        createLanguagesTable(query);
-        createPatronsTable(query);
-        createPatronActivityTable(query);
-        createPatronSettingsTable(query);
-        createInterpretersTable(query);
-        createInterpreterActivityTable(query);
-        createInterpreterSettingsTable(query);
+        createCodesTable(query)
+            .then(createServicesTable(query))
+            .then(createLanguagesTable(query))
+            .then(createPatronsTable(query))
+            .then(createInterpretersTable(query))
+            .then(createPatronActivityTable(query))
+            .then(createPatronSettingsTable(query))
+            .then(createInterpreterActivityTable(query))
+            .then(createInterpreterSettingsTable(query));
 
     }
 
     this.dropAll = async function(query){
         dropPatronActivityTable(query);
-        //dropInterpreterActivityTable(query);
-        //dropPatronSettingsTable(query);
-        //dropInterpreterSettingsTable(query);
-        //dropInterpretersTable(query);
-        //dropPatronsTable(query);
-        //dropCodesTable(query);
-        //dropServicesTable(query);
-        //dropLanguagesTable(query);
+        dropInterpreterActivityTable(query);
+        dropPatronSettingsTable(query);
+        dropInterpreterSettingsTable(query);
+        dropServicesTable(query);
+        dropLanguagesTable(query);
+        dropInterpretersTable(query);
+        dropPatronsTable(query);
+        dropCodesTable(query);
     }
 
     let dropInterpretersTable = async function(query){
 
-        let dropInterpreters = 'DROP TABLE INTERPRETERS;';
+        let dropInterpreters = 'DROP TABLE INTERPRETERS';
 
         try {
             const result  = await query(dropInterpreters);
@@ -42,10 +42,10 @@ module.exports = function(){
     }
     let dropInterpreterActivityTable = async function(query){
 
-        let drop = 'DROP TABLE INTERPRETER_ACTIVITY;';
+        let dropInterpreterActivity = 'DROP TABLE INTERPRETER_ACTIVITY';
 
         try {
-            const result  = await query(drop);
+            const result  = await query(dropInterpreterActivity);
             console.log('drop InterpreterActivity table: ', result);
         } catch(e) {
 
@@ -55,10 +55,10 @@ module.exports = function(){
     }
     let dropInterpreterSettingsTable = async function(query){
 
-        let drop = 'DROP TABLE INTERPRETER_SETTINGS;';
+        let dropInterpreterSettings = 'DROP TABLE INTERPRETER_SETTINGS';
 
         try {
-            const result  = await query(drop);
+            const result  = await query(dropInterpreterSettings);
             console.log('drop Interpreter_Settings table: ', result);
         } catch(e) {
 
@@ -68,10 +68,10 @@ module.exports = function(){
     }
     let dropPatronsTable = async function(query){
 
-        let drop = 'DROP TABLE PATRONS;';
+        let dropPatrons = 'DROP TABLE PATRONS';
 
         try {
-            const result  = await query(drop);
+            const result  = await query(dropPatrons);
             console.log('drop Patrons table: ', result);
         } catch(e) {
 
@@ -79,25 +79,25 @@ module.exports = function(){
             console.log(e);
         }
     }
-    let dropPatronsActivityTable = async function(query){
+    let dropPatronActivityTable = async function(query){
 
-        let drop = 'DROP TABLE PATRONS_ACTIVITY;';
+        let dropPatronActivity = 'DROP TABLE PATRON_ACTIVITY';
 
         try {
-            const result  = await query(drop);
-            console.log('drop Patrons_Activity table: ', result);
+            const result  = await query(dropPatronActivity);
+            console.log('drop Patron_Activity table: ', result);
         } catch(e) {
 
             console.log('dropPatronsActivityTable query failed');
             console.log(e);
         }
     }
-    let dropPatronsSettingsTable = async function(query){
+    let dropPatronSettingsTable = async function(query){
 
-        let drop = 'DROP TABLE PATRONS_SETTINGS';
+        let dropPatronSettings = 'DROP TABLE PATRON_SETTINGS';
 
         try {
-            const result  = await query(drop);
+            const result  = await query(dropPatronSettings);
             console.log('drop Patron_Settings table: ', result);
         } catch(e) {
 
@@ -107,10 +107,10 @@ module.exports = function(){
     }
     let dropLanguagesTable = async function(query){
 
-        let drop = 'DROP TABLE LANGUAGES;';
+        let dropLanguages = 'DROP TABLE LANGUAGES';
 
         try {
-            const result  = await query(drop);
+            const result  = await query(dropLanguages);
             console.log('drop Languages table: ', result);
         } catch(e) {
 
@@ -120,10 +120,10 @@ module.exports = function(){
     }
     let dropServicesTable = async function(query){
 
-        let drop = 'DROP TABLE SERVICES;';
+        let dropServices = 'DROP TABLE SERVICES';
 
         try {
-            const result  = await query(drop);
+            const result  = await query(dropServices);
             console.log('drop Services table: ', result);
         } catch(e) {
 
@@ -133,10 +133,10 @@ module.exports = function(){
     }
     let dropCodesTable = async function(query){
 
-        let drop = 'DROP TABLE CODES;';
+        let dropCodes = 'DROP TABLE CODES';
 
         try {
-            const result  = await query(drop);
+            const result  = await query(dropCodes);
             console.log('drop Codes table: ', result);
         } catch(e) {
 
