@@ -1,5 +1,6 @@
 const {promisify} = require('util');
 require('./createtables.js')();
+require('./droptables.js')();
 //require('./populatetables.js')();
 
 const { Pool } = require('pg');
@@ -11,10 +12,15 @@ const pool = new Pool({
     port: 5432
 });
 
-const query = promisify(pool.query).bind(pool);
 
-createAll(query)
-    .then(dropAll(query));
-//populateAll(query);
+async function build(){
+    const query = promisify(pool.query).bind(pool);
+    await createAll(query);
+    await dropAll(query);
+    await populateAll(query);
+    pool.end();
+}
 
-pool.end();
+build();
+
+

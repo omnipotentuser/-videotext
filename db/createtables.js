@@ -3,154 +3,26 @@ require('./crypt.js')();
 module.exports = function(){
 
     this.createAll = async function(query){
-        createCodesTable(query)
-            .then(createServicesTable(query))
-            .then(createLanguagesTable(query))
-            .then(createPatronsTable(query))
-            .then(createInterpretersTable(query))
-            .then(createPatronActivityTable(query))
-            .then(createPatronSettingsTable(query))
-            .then(createInterpreterActivityTable(query))
-            .then(createInterpreterSettingsTable(query));
+        await createCodesTable(query);
+        await createServicesTable(query);
+        await createLanguagesTable(query);
+        await createPatronsTable(query);
+        await createInterpretersTable(query);
+        await createPatronActivityTable(query);
+        await createPatronSettingsTable(query);
+        await createInterpreterActivityTable(query);
+        await createInterpreterSettingsTable(query);
 
     }
 
-    this.dropAll = async function(query){
-        dropPatronActivityTable(query);
-        dropInterpreterActivityTable(query);
-        dropPatronSettingsTable(query);
-        dropInterpreterSettingsTable(query);
-        dropServicesTable(query);
-        dropLanguagesTable(query);
-        dropInterpretersTable(query);
-        dropPatronsTable(query);
-        dropCodesTable(query);
-    }
-
-    let dropInterpretersTable = async function(query){
-
-        let dropInterpreters = 'DROP TABLE INTERPRETERS';
-
-        try {
-            const result  = await query(dropInterpreters);
-            console.log('drop Interpreters table: ', result);
-        } catch(e) {
-
-            console.log('dropInterpretersTable query failed');
-            console.log(e);
-        }
-    }
-    let dropInterpreterActivityTable = async function(query){
-
-        let dropInterpreterActivity = 'DROP TABLE INTERPRETER_ACTIVITY';
-
-        try {
-            const result  = await query(dropInterpreterActivity);
-            console.log('drop InterpreterActivity table: ', result);
-        } catch(e) {
-
-            console.log('dropInterpreterActivityTable query failed');
-            console.log(e);
-        }
-    }
-    let dropInterpreterSettingsTable = async function(query){
-
-        let dropInterpreterSettings = 'DROP TABLE INTERPRETER_SETTINGS';
-
-        try {
-            const result  = await query(dropInterpreterSettings);
-            console.log('drop Interpreter_Settings table: ', result);
-        } catch(e) {
-
-            console.log('dropInterpreterSettingsTable query failed');
-            console.log(e);
-        }
-    }
-    let dropPatronsTable = async function(query){
-
-        let dropPatrons = 'DROP TABLE PATRONS';
-
-        try {
-            const result  = await query(dropPatrons);
-            console.log('drop Patrons table: ', result);
-        } catch(e) {
-
-            console.log('dropPatronsTable query failed');
-            console.log(e);
-        }
-    }
-    let dropPatronActivityTable = async function(query){
-
-        let dropPatronActivity = 'DROP TABLE PATRON_ACTIVITY';
-
-        try {
-            const result  = await query(dropPatronActivity);
-            console.log('drop Patron_Activity table: ', result);
-        } catch(e) {
-
-            console.log('dropPatronsActivityTable query failed');
-            console.log(e);
-        }
-    }
-    let dropPatronSettingsTable = async function(query){
-
-        let dropPatronSettings = 'DROP TABLE PATRON_SETTINGS';
-
-        try {
-            const result  = await query(dropPatronSettings);
-            console.log('drop Patron_Settings table: ', result);
-        } catch(e) {
-
-            console.log('dropPatronsSettingsTable query failed');
-            console.log(e);
-        }
-    }
-    let dropLanguagesTable = async function(query){
-
-        let dropLanguages = 'DROP TABLE LANGUAGES';
-
-        try {
-            const result  = await query(dropLanguages);
-            console.log('drop Languages table: ', result);
-        } catch(e) {
-
-            console.log('dropLanguagesTable query failed');
-            console.log(e);
-        }
-    }
-    let dropServicesTable = async function(query){
-
-        let dropServices = 'DROP TABLE SERVICES';
-
-        try {
-            const result  = await query(dropServices);
-            console.log('drop Services table: ', result);
-        } catch(e) {
-
-            console.log('dropServicesTable query failed');
-            console.log(e);
-        }
-    }
-    let dropCodesTable = async function(query){
-
-        let dropCodes = 'DROP TABLE CODES';
-
-        try {
-            const result  = await query(dropCodes);
-            console.log('drop Codes table: ', result);
-        } catch(e) {
-
-            console.log('dropCodesTable query failed');
-            console.log(e);
-        }
-    }
     let createInterpretersTable = async function(query){
 
         let createInterpreters = 'CREATE TABLE IF NOT EXISTS INTERPRETERS (ID SERIAL PRIMARY KEY NOT NULL, FIRST_NAME CHAR(32) NOT NULL, LAST_NAME CHAR(32) NOT NULL, Email CHAR(100) NOT NULL, Phone CHAR(16), Street TEXT, City CHAR(32), Country CHAR(32), Postal INT, Gender CHAR(12), Age INT, Username CHAR(32), PWD_Salt TEXT NOT NULL, PWD_Hash TEXT NOT NULL, Created_At Timestamp default current_timestamp, Updated_At Timestamp)';
 
         try {
             const result  = await query(createInterpreters);
-            console.log('create Interpreters table: ', result);
+            //console.log('create Interpreters table: ', result);
+            console.log('created Interpreters table');
         } catch(e) {
 
             console.log('createInterpretersTable query failed');
@@ -163,7 +35,8 @@ module.exports = function(){
 
         try {
             const result  = await query(createPatronActivity);
-            console.log('create PatronActivity table: ', result);
+            //console.log('create PatronActivity table: ', result);
+            console.log('created PatronActivity table');
         } catch(e) {
 
             console.log('createPatronActivityTable query failed');
@@ -176,7 +49,8 @@ module.exports = function(){
 
         try {
             const result  = await query(createPatronSettings);
-            console.log('create PatronSettings table: ', result);
+            //console.log('create PatronSettings table: ', result);
+            console.log('created PatronSettings table');
         } catch(e) {
 
             console.log('createPatronSettingsTable query failed');
@@ -189,7 +63,8 @@ module.exports = function(){
 
         try {
             const result  = await query(createInterpreterSettings);
-            console.log('create InterpreterSettings table: ', result);
+            //console.log('create InterpreterSettings table: ', result);
+            console.log('created InterpreterSettings table');
         } catch(e) {
 
             console.log('createInterpreterSettingsTable query failed');
@@ -202,7 +77,8 @@ module.exports = function(){
 
         try {
             const result  = await query(createInterpreterActivity);
-            console.log('create InterpreterActivity table: ', result);
+            //console.log('create InterpreterActivity table: ', result);
+            console.log('created InterpreterActivity table');
         } catch(e) {
 
             console.log('createInterpreterActivityTable query failed');
@@ -215,7 +91,8 @@ module.exports = function(){
 
         try {
             const result  = await query(createServices);
-            console.log('create Services table: ', result);
+            //console.log('create Services table: ', result);
+            console.log('created Services table');
         } catch(e) {
 
             console.log('createServicesTable query failed');
@@ -228,7 +105,8 @@ module.exports = function(){
 
         try {
             const result  = await query(createLanguages);
-            console.log('create Languages table: ', result);
+            //console.log('create Languages table: ', result);
+            console.log('created Languages table');
         } catch(e) {
 
             console.log('createLanguagesTable query failed');
@@ -240,7 +118,8 @@ module.exports = function(){
         let createCodes = 'CREATE TABLE IF NOT EXISTS CODES (ID SERIAL PRIMARY KEY NOT NULL, ENUM SERIAL, NAME TEXT NOT NULL, Created_At Timestamp default current_timestamp, Updated_At Timestamp)';
         try {
             const result  = await query(createCodes);
-            console.log('create Codes table: ', result);
+            //console.log('create Codes table: ', result);
+            console.log('created Codes table');
         } catch(e) {
 
             console.log('createCodesTable query failed');
@@ -253,7 +132,8 @@ module.exports = function(){
 
         try {
             const result  = await query(createPatron);
-            console.log('create Patrons table: ', result);
+            //console.log('create Patrons table: ', result);
+            console.log('created Patrons table');
         } catch(e) {
 
             console.log('createPatronsTable query failed');
