@@ -1,4 +1,4 @@
-require('./crypt.js')();
+//require('./crypt.js')();
 
 module.exports = function(){
 

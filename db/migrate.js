@@ -1,7 +1,7 @@
 const {promisify} = require('util');
 require('./createtables.js')();
 require('./droptables.js')();
-//require('./populatetables.js')();
+require('./populatetables.js')();
 
 const { Pool } = require('pg');
 const pool = new Pool({
@@ -15,8 +15,8 @@ const pool = new Pool({
 
 async function build(){
     const query = promisify(pool.query).bind(pool);
-    await createAll(query);
     await dropAll(query);
+    await createAll(query);
     await populateAll(query);
     pool.end();
 }

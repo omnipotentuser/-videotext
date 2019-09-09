@@ -4,23 +4,21 @@ let crypto = require('crypto');
 
 module.exports = function(){
 
-    this.genRandomString = function(length){
+    let genRandomString = function(length){
         return crypto.randomBytes(Math.ceil(length/2)).toString('hex').slice(0,length);
     };
 
-    this.sha512 = function(password, salt){
+    let sha512 = function(password, salt){
         let hash = crypto.createHmac('sha512', salt);
         hash.update(password);
         let value = hash.digest('hex');
-        return {
-            salt: salt,
-            passwordHash: value
-        };
+        return value;
     };
 
-    this.saltHashPassword = async function(userpw){
+    this.saltPassword = async function(userpw){
         let salt = await genRandomString(16);
-        let pwData = await sha512(usrpw, salt);
+        let hashedPW = await sha512(userpw, salt);
+        return [salt, hashedPW];
     };
 
     /*
