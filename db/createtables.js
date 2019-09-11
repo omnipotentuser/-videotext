@@ -1,5 +1,3 @@
-//require('./crypt.js')();
-
 module.exports = function(){
 
     this.createAll = async function(query){

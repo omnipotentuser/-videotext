@@ -1,5 +1,3 @@
-//require('./crypt.js')();
-
 module.exports = function(){
 
     this.dropAll = async function(query){
