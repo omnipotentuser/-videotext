@@ -1,6 +1,4 @@
 let crypto = require('crypto');
-// example of getting salt and hash
-
 
 module.exports = function(){
 

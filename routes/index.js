@@ -147,8 +147,32 @@ router.post('/login', function(req, res, next) {
         res.status(404).send({msg: "Please enter both id and password"});
     } else {
         console.log('uname='+req.body.uname+", psw="+req.body.psw);
+
+        var patron = "SELECT PWD_SALT, PWD_HASH FROM PATRONS WHERE USERNAME == $1";
+        var interpreter = "SELECT PWD_SALT, PWD_HASH FROM INTERPRETERS WHERE USERNAME == $1";
+
+        (async() => {
+            try {
+                let p_results = await query(patron, req.body.uname);
+                let i_results = await query(interpreter, req.body.uname);
+                //console.log('allergy query results: ', results);
+                //console.log('allergy query results id: ', results.rows[0].id);
+                //allergy_id = results.rows[0].id;
+                //gender_id = results.rows[0].id;
+                console.log('login creds matches');
+                req.session.user = user;
+                res.redirect('/videochat');
+            } catch (err) {
+                res.status(404).send({msg: "credentials failed"});
+            }
+        });
+
         Users.filter(function(user){
             console.log('user.uname='+user.uname+", user.psw="+user.psw);
+
+            // THIS IS WHERE WE ENTER LOGIC TO DETERMINE WHO IS WHO
+            // IF INTERPRETER, LOGIN TO VIDEOCHAT APP, ELSE PATRON MENU
+            //
             if(user.uname === req.body.uname && user.psw === req.body.psw){
                 console.log('login creds matches');
                 req.session.user = user;
