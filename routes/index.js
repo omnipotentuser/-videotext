@@ -4,11 +4,12 @@ const router = express.Router();
 const util = require('util');
 
 
+require('../db/crypt.js')();
 const { Pool } = require('pg')
 const pool = new Pool({
     user: 'nick',
     host: 'localhost',
-    database: 'registration',
+    database: 'mca',
     password: 'nobis',
     port: 5432
 })
@@ -146,15 +147,28 @@ router.post('/login', function(req, res, next) {
     if (!req.body.uname || !req.body.psw){
         res.status(404).send({msg: "Please enter both id and password"});
     } else {
-        console.log('uname='+req.body.uname+", psw="+req.body.psw);
+        let user = req.body.uname;
+        let pass = req.body.psw;
+        console.log('username='+user+", psw="+pass);
 
-        var patron = "SELECT PWD_SALT, PWD_HASH FROM PATRONS WHERE USERNAME == $1";
-        var interpreter = "SELECT PWD_SALT, PWD_HASH FROM INTERPRETERS WHERE USERNAME == $1";
+        var patron = "SELECT PWD_SALT, PWD_HASH FROM PATRONS WHERE USERNAME = $1";
+        var interpreter = "SELECT PWD_SALT, PWD_HASH FROM INTERPRETERS WHERE USERNAME = $1";
 
         (async() => {
+
             try {
-                let p_results = await query(patron, req.body.uname);
-                let i_results = await query(interpreter, req.body.uname);
+
+                console.log('before query');
+                let p_results = await query(patron, [user]);
+                console.log('p_results: ', p_results);
+
+                let i_results = await query(interpreter, [user]);
+
+                console.log('i_results: ', i_results);
+
+                //let hashedPW = await sha512(p_results
+
+
                 //console.log('allergy query results: ', results);
                 //console.log('allergy query results id: ', results.rows[0].id);
                 //allergy_id = results.rows[0].id;
@@ -165,8 +179,10 @@ router.post('/login', function(req, res, next) {
             } catch (err) {
                 res.status(404).send({msg: "credentials failed"});
             }
-        });
 
+        })();
+
+        /*
         Users.filter(function(user){
             console.log('user.uname='+user.uname+", user.psw="+user.psw);
 
@@ -181,6 +197,7 @@ router.post('/login', function(req, res, next) {
                 res.status(404).send({msg: "credentials failed"});
             }
         });
+        */
     }
 });
 
