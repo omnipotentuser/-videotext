@@ -7,9 +7,13 @@ module.exports = function(){
     };
 
     this.sha512 = async function(password, salt){
+        console.log('sha512 called');
         let hash = crypto.createHmac('sha512', salt);
+        console.log('hash received');
         hash.update(password);
+        console.log('update hash with password');
         let value = hash.digest('hex');
+        console.log('generate value from hash digest based on hex');
         return value;
     };
 

@@ -2,9 +2,9 @@
 const express = require('express');
 const router = express.Router();
 const util = require('util');
+const path = require('path');
+require(path.join('..', 'util', 'crypt.js'))();
 
-
-require('../db/crypt.js')();
 const { Pool } = require('pg')
 const pool = new Pool({
     user: 'nick',
@@ -159,23 +159,57 @@ router.post('/login', function(req, res, next) {
             try {
 
                 console.log('before query');
-                let p_results = await query(patron, [user]);
-                console.log('p_results: ', p_results);
+                let results = await query(patron, [user]);
+                let rows = results.rows;
+                console.log('rows: ', rows);
+                console.log('rows length: ', rows.length);
+                if (rows.length == 0){
+                    results = await query(interpreter, [user]);
+                    rows = results.rows;
+                    if (rows.length == 0){
+                        res.status(404).send({msg: "credentials not found"});
+                        return;
+                    } else {
+                        let salt = rows[0].pwd_salt;
+                        let hash = rows[0].pwd_hash;
+                        let stored_hash = await sha512(pass, salt);
 
-                let i_results = await query(interpreter, [user]);
+                        console.log('Interpreter stored_hash: ', stored_hash);
+                        if (stored_hash.passwordHash == hash){
+                            console.log('Interpreter login creds matches');
+                            req.session.user = user;
+                            res.redirect('/videochat');
+                        } else {
+                            console.log('Interpreter login creds mismatch');
+                            res.status(404).send({msg: "credentials failed"});
+                        }
+                    }
+                } else {
+                    console.log('Patron query for hashed password');
+                    let salt = rows[0].pwd_salt;
+                    let hash = rows[0].pwd_hash;
+                    let stored_hash = await sha512(pass, salt);
 
-                console.log('i_results: ', i_results);
+                    console.log('Patron stored_hash: ', stored_hash);
+                    console.log(stored_hash.passwordHash, " == ", hash);
 
-                //let hashedPW = await sha512(p_results
+                    if (stored_hash.passwordHash == hash){
+                        console.log('Patron login creds matches');
+                        req.session.user = user;
+                        res.redirect('/videochat');
+                    } else {
+                        console.log('Patron login creds mismatch');
+                        res.status(404).send({msg: "credentials failed"});
+                    }
+                    
+                }
+
 
 
                 //console.log('allergy query results: ', results);
                 //console.log('allergy query results id: ', results.rows[0].id);
                 //allergy_id = results.rows[0].id;
                 //gender_id = results.rows[0].id;
-                console.log('login creds matches');
-                req.session.user = user;
-                res.redirect('/videochat');
             } catch (err) {
                 res.status(404).send({msg: "credentials failed"});
             }

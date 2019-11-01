@@ -1,5 +1,6 @@
 
-require('./crypt.js')();
+const path = require('path');
+require(path.join("../", "util","crypt.js"))();
 
 module.exports = function(){
 
