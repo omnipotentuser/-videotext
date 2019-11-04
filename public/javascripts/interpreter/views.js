@@ -23,7 +23,6 @@ function VideochatViews(){
 
     this.openMediaViews = function(){
         totalMediaCount++;
-        $('#interpreter-room-input').css('display','none');
         $('#interpreter-video-container').css('display','grid');
         $('#interpreter-video-container').css('grid-template-columns','1fr');
         $('#interpreter-video-container').css('grid-template-rows','1fr');
@@ -50,7 +49,7 @@ function VideochatViews(){
         if (totalMediaCount > 4) return false;
 
         $("<div>", {class: 'media-layout'})
-            .append('<video id="'+pid+'" autoplay controls>')
+            .append('<video id="v'+pid+'" autoplay controls>')
             .appendTo('#interpreter-video-container');
         var colSize, rowSize;
         if (totalMediaCount == 2){
@@ -76,7 +75,7 @@ function VideochatViews(){
     }
 
     this.deletePeerMedia = function(pid){
-        $('#'+pid).parent().remove();
+        $('#v'+pid).parent().remove();
         //var $ml = $('.media-layout');
         //var percent = (100 / $ml.length);
         //$ml.css('width',percent+'%');

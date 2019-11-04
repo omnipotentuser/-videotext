@@ -48,8 +48,11 @@ $(document).ready(function(){
 
     var joinRoom = function(){
 
-        if (roomName === ''){
+        console.log('joinRoom roomName_', roomName, '_default');
+
+        if (!roomName){
             roomName = generateID();
+            console.log('joinRoom roomName_', roomName, '_generated');
         }
         
         if (roomName === ''){
@@ -60,6 +63,7 @@ $(document).ready(function(){
                 console.log('starting rtc engine');
                 engine.connect(handleSocketEvents);
             })(roomName, rtc_engine);
+            window.history.pushState({}, "MCA Interpreter "+roomName, "#"+roomName);
         }
     };
 
