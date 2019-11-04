@@ -5,7 +5,7 @@ function VideochatViews(){
 
         $('<div/>', {id:'local-container', class:'media-layout'})
             .append('<video id=\"local-video\" autoplay playsinline controls muted>')
-            .appendTo('#videochat-video-container');
+            .appendTo('#interpreter-video-container');
 
         var $input = $('#roomnameinput');
         $input.focus();
@@ -23,16 +23,16 @@ function VideochatViews(){
 
     this.openMediaViews = function(){
         totalMediaCount++;
-        $('#videochat-room-input').css('display','none');
-        $('#videochat-video-container').css('display','grid');
-        $('#videochat-video-container').css('grid-template-columns','1fr');
-        $('#videochat-video-container').css('grid-template-rows','1fr');
+        $('#interpreter-room-input').css('display','none');
+        $('#interpreter-video-container').css('display','grid');
+        $('#interpreter-video-container').css('grid-template-columns','1fr');
+        $('#interpreter-video-container').css('grid-template-rows','1fr');
     };
 
     this.closeMediaViews = function(){
-        $('#videochat-room-title').empty();
-        $('#videochat-video-container').fadeOut(function(){
-            $('#videochat-room-input').fadeIn( 200, function destroyCB(){
+        $('#interpreter-room-title').empty();
+        $('#interpreter-video-container').fadeOut(function(){
+            $('#interpreter-room-input').fadeIn( 200, function destroyCB(){
                 //destroyCallback(next);
                 console.log('ending videotext views connection');
             });
@@ -51,7 +51,7 @@ function VideochatViews(){
 
         $("<div>", {class: 'media-layout'})
             .append('<video id="'+pid+'" autoplay controls>')
-            .appendTo('#videochat-video-container');
+            .appendTo('#interpreter-video-container');
         var colSize, rowSize;
         if (totalMediaCount == 2){
             colSize = "1fr 1fr";
@@ -70,8 +70,8 @@ function VideochatViews(){
             rowSize = "1fr";
             $('video').css('height','100vh');
         }
-        $('#videochat-video-container').css('grid-template-columns',colSize);
-        $('#videochat-video-container').css('grid-template-rows',rowSize);
+        $('#interpreter-video-container').css('grid-template-columns',colSize);
+        $('#interpreter-video-container').css('grid-template-rows',rowSize);
         return true;
     }
 
@@ -99,14 +99,14 @@ function VideochatViews(){
             rowSize = "1fr 1fr";
             $('video').css('height','50vh');
         }
-        $('#videochat-video-container').css('grid-template-columns',colSize);
-        $('#videochat-video-container').css('grid-template-rows',rowSize);
+        $('#interpreter-video-container').css('grid-template-columns',colSize);
+        $('#interpreter-video-container').css('grid-template-rows',rowSize);
         console.log('deletePeerMedia', pid);
     }
 
     this.deleteAllMedia = function(){
         totalMediaCount = 0;
-        $('#videochat-video-container').empty(); 
+        $('#interpreter-video-container').empty(); 
     }
 
     initialize();

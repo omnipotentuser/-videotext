@@ -15,76 +15,6 @@ const pool = new Pool({
 })
 const query = util.promisify(pool.query).bind(pool);
 
-// EXAMPLE REGISTRATION SECTION
-
-router.post('/register', function(req, res, next) {
-    console.log('/REGISTER request');
-    console.log('req.body ', req.body);
-
-    if (!Array.isArray(req.body.allergies))
-        req.body.allergies = [req.body.allergies];
-
-    var regform = {
-        gfn: req.body.guardian_first_name,
-        gln: req.body.guardian_last_name,
-        cfn: req.body.child_first_name,
-        cln: req.body.child_last_name,
-        allergies: req.body.allergies,
-        gender: req.body.gender
-    };
-
-    var allergyarray = [false, false, false, false];
-    regform.allergies.forEach(function(value){
-        switch(value){
-            case "lactose":
-                allergyarray[0] = true;
-                break;
-            case "latex":
-                allergyarray[3] = true;
-                break;
-            case "penicillin":
-                allergyarray[2] = true;
-                break;
-            case "peanuts":
-                allergyarray[1] = true;
-                break;
-            default:
-                break;
-
-        }
-    });
-
-    (async () => {
-
-        var allergy = "INSERT INTO allergies (lactose, peanuts, penicillin, latex) VALUES ($1, $2, $3, $4) RETURNING id";
-        var gender = "INSERT INTO gender (code) VALUES ($1) ON CONFLICT DO NOTHING RETURNING id";
-        var register = "INSERT INTO registrant (guardian_first_name, guardian_last_name, student_first_name, student_last_name, allergies_id, gender_id) VALUES ($1, $2, $3, $4, $5, $6) ON CONFLICT DO NOTHING";
-
-        var allergy_id, gender_id;
-        try {
-            let results = await query(allergy, allergyarray);
-            //console.log('allergy query results: ', results);
-            //console.log('allergy query results id: ', results.rows[0].id);
-            allergy_id = results.rows[0].id;
-            results = await query(gender, [regform.gender]);
-            gender_id = results.rows[0].id;
-            results = await query(register, [regform.gfn, regform.gln, regform.cfn, regform.cln, allergy_id, gender_id]);
-            res.send({msg: "success"});
-        } catch (err) {
-            res.send({msg: "error"});
-        }
-    })
-
-    /*
-    } else {
-        res.status(404).send({msg: "Unknown error occured"});
-    }
-    */
-});
-
-
-
-
 // ADMINISTRATOR SECTION
 
 var crypto = require('crypto');
@@ -168,7 +98,6 @@ router.post('/login', function(req, res, next) {
                     rows = results.rows;
                     if (rows.length == 0){
                         res.status(404).send({msg: "credentials not found"});
-                        return;
                     } else {
                         let salt = rows[0].pwd_salt;
                         let hash = rows[0].pwd_hash;
@@ -178,7 +107,7 @@ router.post('/login', function(req, res, next) {
                         if (stored_hash.passwordHash == hash){
                             console.log('Interpreter login creds matches');
                             req.session.user = user;
-                            res.redirect('/videochat');
+                            res.redirect('/interpreter');
                         } else {
                             console.log('Interpreter login creds mismatch');
                             res.status(404).send({msg: "credentials failed"});
@@ -196,20 +125,13 @@ router.post('/login', function(req, res, next) {
                     if (stored_hash.passwordHash == hash){
                         console.log('Patron login creds matches');
                         req.session.user = user;
-                        res.redirect('/videochat');
+                        res.redirect('/patron');
                     } else {
                         console.log('Patron login creds mismatch');
                         res.status(404).send({msg: "credentials failed"});
                     }
                     
                 }
-
-
-
-                //console.log('allergy query results: ', results);
-                //console.log('allergy query results id: ', results.rows[0].id);
-                //allergy_id = results.rows[0].id;
-                //gender_id = results.rows[0].id;
             } catch (err) {
                 res.status(404).send({msg: "credentials failed"});
             }
@@ -258,6 +180,18 @@ router.get('/videochat', function(req, res, next) {
     }
 });
 
+
+router.get('/interpreter', function(req, res, next) {
+    console.log('requesting interpreter app');
+    console.log('user_sid=%s', req.cookies.user_sid);
+    console.log('session user=%s', JSON.stringify(req.session));
+    if (req.session.user && req.cookies.user_sid){
+        console.log('rendering interpreter app');
+        res.render('interpreter');
+    } else {
+        res.redirect('/login');
+    }
+});
 
 // LOGIN-FREE videotext
 router.get('/vc', function(req, res, next) {
