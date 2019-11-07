@@ -5,8 +5,7 @@ function RTCEngine(){
         , peer = null
         , socket = null
         , roomName = null
-        , isLocked = null
-        , password = null
+        , userType = null
         , localStream = null
         , localId = null
         , stunOn = true
@@ -18,13 +17,9 @@ function RTCEngine(){
     var specialCharCode = {'8':'8', '13':'13', '32':'32', '186':'58', '187':'61', '188':'44', '189':'45', '190':'46', '191':'47', '192':'96', '219':'91', '220':'92', '221':'93', '222':'39'};
 
     function startMedia(data){
-        if (data && data.room){
+        if (data && data.room && data.userType){
             roomName = data.room;
-        }
-        if ( data && data.password){
-            isLocked = true;
-            password = data.password;
-            console.log('password', password);
+            userType = data.userType;
         }
         const media_constraints = window.constraints = {
             video : true
@@ -45,11 +40,11 @@ function RTCEngine(){
                 var video = document.querySelector('#local-video');
                 video.srcObject = stream;
                 console.log('joining', roomName);
+                console.log('using the userType', userType);
                 var info = {
                     room: roomName
                     , stunOn: stunOn
-                    , isLocked: isLocked
-                    , password: password
+                    , userType: userType
                 };
                 socket.emit('join', info);
             })

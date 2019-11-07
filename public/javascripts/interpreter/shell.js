@@ -13,7 +13,10 @@ $(document).ready(function(){
             switch (signaler) {
                 case 'connected':
                     console.log('rtc engine connected');
-                    rtc_engine.join({room:roomName});
+                    rtc_engine.join({
+                        room:roomName,
+                        userType:"interpreter"
+                    });
                     break;
                 case 'id':
                     localId = data.id;
