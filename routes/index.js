@@ -193,6 +193,18 @@ router.get('/interpreter', function(req, res, next) {
     }
 });
 
+router.get('/patron', function(req, res, next) {
+    console.log('requesting patron app');
+    console.log('user_sid=%s', req.cookies.user_sid);
+    console.log('session user=%s', JSON.stringify(req.session));
+    if (req.session.user && req.cookies.user_sid){
+        console.log('rendering patron app');
+        res.render('patron');
+    } else {
+        res.redirect('/login');
+    }
+});
+
 // LOGIN-FREE videotext
 router.get('/vc', function(req, res, next) {
     console.log('requesting member-free videochat');

@@ -48,7 +48,7 @@ function RTCEngine(){
                 };
                 socket.emit('join', info);
             })
-        } catch(err){
+        } catch(err) {
             console.log('getUserMedia error: ', err);
             if(socket){
                 socket.disconnect();
