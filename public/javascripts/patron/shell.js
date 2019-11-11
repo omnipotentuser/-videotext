@@ -2,31 +2,29 @@
 
 $(document).ready(function(){
     var rtc_engine = new RTCEngine();
-    var videochatViews = new VideochatViews();
+    const videochatViews = new VideochatViews();
+    const transcriberViews = new TranscriberViews();
     var localId = null;
-    var roomName = '';
-    var $input = $('#roomnameinput');
-    var joinRoomBtn = $('#joinroombtn');
+    var joinVideoBtn = $('#joinroombtn');
     var exitRoom = $('#local-video');
-    var randGenBtn = $('#randomgeneratorbtn');
+    var joinTranscriberBtn = $('#randomgeneratorbtn');
 
-    var handleSocketEvents = function(signaler, data){
+    var handleVideoSocketEvents = function(signaler, data){
         if (signaler){
             var pid = '';
             switch (signaler) {
                 case 'connected':
                     console.log('rtc engine connected');
-                    rtc_engine.join({room:roomName});
+                    let roomName = "";
+                    let userType = "patron";
+                    rtc_engine.join({room:roomName, userType:userType});
                     break;
                 case 'id':
                     localId = data.id;
                     break;
                 case 'create':
                     pid = data.id;
-                    console.log(
-                        'creating new media element', 
-                        pid
-                    );
+                    console.log( 'creating new media element', pid);
                     var created = videochatViews.appendPeerMedia(pid);
                     console.log('******* Was peer created?', created);
                     return created;
@@ -49,33 +47,26 @@ $(document).ready(function(){
         }
     };
 
-    var handleJoinBtn = function(event){
+    var handleVideoBtn = function(event){
 
-        if (roomName === ''){
-            roomName = $input.val();
-        }
-        
-        if (roomName === ''){
-            window.alert('Cannot have empty name');
-        } else {
-            event.preventDefault();
-            videochatViews.openMediaViews();
+        event.preventDefault();
+        videochatViews.openMediaViews();
+        console.log('starting rtc engine');
+        rtc_engine.connect(handleVideoSocketEvents);
 
-            (function(room, engine){
-                console.log('starting rtc engine');
-                engine.connect(handleSocketEvents);
-            })(roomName, rtc_engine);
+        joinVideoBtn.unbind('click', handleVideoBtn);
+        joinTranscriberBtn.unbind('click', handleTranscriberBtn);
+    };
 
-            window.history.replaceState({}, "OpenStream "+roomName, "#"+roomName);
-            joinRoomBtn.unbind('click', handleJoinBtn);
-            randGenBtn.unbind('click', handleRandGenBtn);
-        }
+    var handleTranscriberBtn = function(event){
+        joinVideoBtn.unbind('click', handleVideoBtn);
+        joinTranscriberBtn.unbind('click', handleTranscriberBtn);
     };
 
     var handleExitBtn = function(event){
         $input.val('');
-        joinRoomBtn.bind('click', handleJoinBtn);
-        randGenBtn.bind('click', handleRandGenBtn);
+        joinVideoBtn.bind('click', handleVideoBtn);
+        transcriberBtn.bind('click', handleTranscriberBtn);
         rtc_engine.leave();
         videochatViews.closeMediaViews();
         videochatViews = null;
@@ -83,41 +74,10 @@ $(document).ready(function(){
         location.href = "/vpexit";
     };
 
-    var S4 = function(){
-        return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-    };
-
-    var    generateID = function(){
-        return (S4() + S4() + '-' + S4() + '-' + S4() + '-' + S4() + '-' + S4() + S4() + S4());
-    };
-
-    var handleRandGenBtn = function(event){
-        $input.val(generateID());
-        joinRoomBtn.trigger('click');
-    };
-
-    joinRoomBtn.bind('click', handleJoinBtn);
     exitRoom.bind('click', handleExitBtn);
-    randGenBtn.bind('click', handleRandGenBtn);
+    joinVideoBtn.bind('click', handleVideoBtn);
+    joinTranscriberBtn.bind('click', handleTranscriberBtn);
 
     videochatViews.setListeners(rtc_engine);
-    (function queryUrl(){
-        var hashurl = window.location.hash;
-        var hashpos = hashurl.lastIndexOf('#');
-        if (hashpos !== -1){
-            hashurl = hashurl.substring(hashpos + 1);
-        }
-        if (hashpos === -1){
-            roomName = '';
-        } else if (hashurl.length > 0){
-            roomName = hashurl;
-        } else {
-            roomName = '';
-        }
-        console.log('roomName',roomName);
-        if (roomName !== ''){
-            joinRoomBtn.trigger('click');
-        }
-    })();
 })
 
