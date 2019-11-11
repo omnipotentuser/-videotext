@@ -5,8 +5,9 @@ function VideochatViews(){
 
         $('<div/>', {id:'local-container', class:'media-layout'})
             .append('<video id=\"local-video\" autoplay playsinline controls muted>')
-            .appendTo('#videochat-video-container');
+            .appendTo('#patron-video-container');
 
+        /*
         var $input = $('#roomnameinput');
         $input.focus();
         $input.keypress(function(event){
@@ -15,6 +16,7 @@ function VideochatViews(){
                 $('#joinroombtn').trigger("click");
             }
         });
+        */
     };
 
     this.setListeners = function(engine){
@@ -23,16 +25,16 @@ function VideochatViews(){
 
     this.openMediaViews = function(){
         totalMediaCount++;
-        $('#videochat-room-input').css('display','none');
-        $('#videochat-video-container').css('display','grid');
-        $('#videochat-video-container').css('grid-template-columns','1fr');
-        $('#videochat-video-container').css('grid-template-rows','1fr');
+        $('#patron-room-input').css('display','none');
+        $('#patron-video-container').css('display','grid');
+        $('#patron-video-container').css('grid-template-columns','1fr');
+        $('#patron-video-container').css('grid-template-rows','1fr');
     };
 
     this.closeMediaViews = function(){
-        $('#videochat-room-title').empty();
-        $('#videochat-video-container').fadeOut(function(){
-            $('#videochat-room-input').fadeIn( 200, function destroyCB(){
+        $('#patron-room-title').empty();
+        $('#patron-video-container').fadeOut(function(){
+            $('#patron-room-input').fadeIn( 200, function destroyCB(){
                 //destroyCallback(next);
                 console.log('ending videotext views connection');
             });
@@ -51,7 +53,7 @@ function VideochatViews(){
 
         $("<div>", {class: 'media-layout'})
             .append('<video id="v'+pid+'" autoplay controls>')
-            .appendTo('#videochat-video-container');
+            .appendTo('#patron-video-container');
         var colSize, rowSize;
         if (totalMediaCount == 2){
             colSize = "1fr 1fr";
@@ -70,8 +72,8 @@ function VideochatViews(){
             rowSize = "1fr";
             $('video').css('height','100vh');
         }
-        $('#videochat-video-container').css('grid-template-columns',colSize);
-        $('#videochat-video-container').css('grid-template-rows',rowSize);
+        $('#patron-video-container').css('grid-template-columns',colSize);
+        $('#patron-video-container').css('grid-template-rows',rowSize);
         return true;
     }
 
@@ -99,14 +101,14 @@ function VideochatViews(){
             rowSize = "1fr 1fr";
             $('video').css('height','50vh');
         }
-        $('#videochat-video-container').css('grid-template-columns',colSize);
-        $('#videochat-video-container').css('grid-template-rows',rowSize);
+        $('#patron-video-container').css('grid-template-columns',colSize);
+        $('#patron-video-container').css('grid-template-rows',rowSize);
         console.log('deletePeerMedia', pid);
     }
 
     this.deleteAllMedia = function(){
         totalMediaCount = 0;
-        $('#videochat-video-container').empty(); 
+        $('#patron-video-container').empty(); 
     }
 
     initialize();

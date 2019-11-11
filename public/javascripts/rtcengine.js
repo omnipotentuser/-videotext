@@ -276,9 +276,13 @@ function RTCEngine(){
         });
         socket.on('info', function(message){
             var code;
+            console.log(message.info);
             switch (message.info) {
                 case 'room empty': 
                     code = 'Room is empty';
+                    break;
+                case 'novacancy':
+                    code = message.info;
                     break;
                 default:
                     code = 'Unknown Error';

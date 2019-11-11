@@ -2,12 +2,12 @@
 
 $(document).ready(function(){
     var rtc_engine = new RTCEngine();
-    const videochatViews = new VideochatViews();
-    const transcriberViews = new TranscriberViews();
+    let videochatViews = new VideochatViews();
+    let transcriberViews = new TranscriberViews();
     var localId = null;
-    var joinVideoBtn = $('#joinroombtn');
+    var joinVideoBtn = $('#joinvideobtn');
+    var joinTranscriberBtn = $('#jointranscriberbtn');
     var exitRoom = $('#local-video');
-    var joinTranscriberBtn = $('#randomgeneratorbtn');
 
     var handleVideoSocketEvents = function(signaler, data){
         if (signaler){
@@ -35,6 +35,10 @@ $(document).ready(function(){
                     break;
                 case 'info':
                     console.log(data.msg);
+                    if (data.msg == 'novacancy'){
+                        window.alert('No Interpreter available. Try again later.');
+                        exitRoom.trigger('click');
+                    }
                     break;
                 case 'error':
                     // need to handle error for room full
@@ -64,14 +68,14 @@ $(document).ready(function(){
     };
 
     var handleExitBtn = function(event){
-        $input.val('');
         joinVideoBtn.bind('click', handleVideoBtn);
-        transcriberBtn.bind('click', handleTranscriberBtn);
+        joinTranscriberBtn.bind('click', handleTranscriberBtn);
         rtc_engine.leave();
         videochatViews.closeMediaViews();
         videochatViews = null;
+        TranscriberViews = null;
         rtc_engine = null;
-        location.href = "/vpexit";
+        location.href = "/patron";
     };
 
     exitRoom.bind('click', handleExitBtn);
