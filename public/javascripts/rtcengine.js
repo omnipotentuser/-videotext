@@ -180,6 +180,11 @@ function RTCEngine(){
             var users = message.users;
             var len = message.len;
 
+            if (typeof message.roomName !== 'undefined' && message.roomName !== null){
+                if( message.roomName !== roomName){
+                    roomName = message.roomName;
+                }
+            }
             var ice = message.ice ? message.ice : iceConfig;
             console.log('handleCreatePeers users:', users);
             if(users.length > 0)
