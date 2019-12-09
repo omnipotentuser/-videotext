@@ -199,13 +199,13 @@ function Peer(p_socket, p_id, p_roomName, iceConfig) {
     };
 
     this.setRemoteDescription = function (p_remote_sdp) {
-		console.log('setRemoteDescription signalingState ' + pc.signalingState);
-		pc.setRemoteDescription(new RTCSessionDescription(p_remote_sdp), function () {
+        console.log('setRemoteDescription signalingState ' + pc.signalingState);
+        pc.setRemoteDescription(new RTCSessionDescription(p_remote_sdp), function () {
             if(pc.remoteDescription.type === 'offer') {
                 console.log('createAnswer to remote sdp offer');
                 pc.createAnswer(localDescCreated, logError);
             }
-		}, logError);
+        }, logError);
     };
 
     this.sendData = function(byteChar){
