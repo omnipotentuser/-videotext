@@ -1,15 +1,14 @@
-/* globals RTCEngine:true, VideochatViews:true */
+'use strict';
+/* globals RTCEngine:true, SessionsViews:true */
 
 $(document).ready(function(){
     var rtc_engine = new RTCEngine();
-    let videochatViews = new VideochatViews();
-    let transcriberViews = new TranscriberViews();
+    let patronViews = new PatronViews();
     var localId = null;
-    var joinVideoBtn = $('#joinvideobtn');
-    var joinTranscriberBtn = $('#jointranscriberbtn');
-    var exitRoom = $('#local-video');
+    var startSessionBtn = $('#joinsessionbtn');
+    var exitSession = $('#exitsession');
 
-    var handleVideoSocketEvents = function(signaler, data){
+    var handleSocketEvents = function(signaler, data){
         if (signaler){
             var pid = '';
             switch (signaler) {
@@ -25,19 +24,19 @@ $(document).ready(function(){
                 case 'create':
                     pid = data.id;
                     console.log( 'creating new media element', pid);
-                    var created = videochatViews.appendPeerMedia(pid);
+                    var created = patronViews.appendPeerMedia(pid);
                     console.log('******* Was peer created?', created);
                     return created;
                     break;
                 case 'peerDisconnect':
                     pid = data.id;
-                    videochatViews.deletePeerMedia(data.id);
+                    patronViews.deletePeerMedia(data.id);
                     break;
                 case 'info':
                     console.log(data.msg);
                     if (data.msg == 'novacancy'){
                         window.alert('No Interpreter available. Try again later.');
-                        exitRoom.trigger('click');
+                        exitSession.trigger('click');
                     }
                     break;
                 case 'error':
@@ -51,37 +50,29 @@ $(document).ready(function(){
         }
     };
 
-    var handleVideoBtn = function(event){
+    var handleStartSession = function(event){
 
         event.preventDefault();
-        videochatViews.openMediaViews();
+        
+        patronViews.setListeners(rtc_engine);
+        patronViews.openMediaViews();
         console.log('starting rtc engine');
-        rtc_engine.connect(handleVideoSocketEvents);
+        rtc_engine.connect(handleSocketEvents);
 
-        joinVideoBtn.unbind('click', handleVideoBtn);
-        joinTranscriberBtn.unbind('click', handleTranscriberBtn);
-    };
-
-    var handleTranscriberBtn = function(event){
-        joinVideoBtn.unbind('click', handleVideoBtn);
-        joinTranscriberBtn.unbind('click', handleTranscriberBtn);
+        startSessionBtn.unbind('click', handleStartSession);
     };
 
     var handleExitBtn = function(event){
-        joinVideoBtn.bind('click', handleVideoBtn);
-        joinTranscriberBtn.bind('click', handleTranscriberBtn);
+        startSessionBtn.bind('click', handleStartSession);
         rtc_engine.leave();
-        videochatViews.closeMediaViews();
-        videochatViews = null;
-        TranscriberViews = null;
+        patronViews.closeMediaViews();
+        patronViews = null;
         rtc_engine = null;
         location.href = "/patron";
     };
 
-    exitRoom.bind('click', handleExitBtn);
-    joinVideoBtn.bind('click', handleVideoBtn);
-    joinTranscriberBtn.bind('click', handleTranscriberBtn);
+    exitSession.bind('click', handleExitBtn);
+    startSessionBtn.bind('click', handleStartSession);
 
-    videochatViews.setListeners(rtc_engine);
 })
 

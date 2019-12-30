@@ -4,10 +4,16 @@ html
         include patron_header
     body
         #patron-main
-            #patron-room-input
-                //input#roomnameinput(placeholder='Room Name' focus)
-                button#joinvideobtn(title="Join Video Interpreting Session") Video
-                button#jointranscriberbtn(title='Speech Transcriber App') Transcriber
-            #patron-video-container
+            #patron-title-container
+                h1 MCA Interpreter
+                #patron-session-title
+                img(id='exitsession' title="Logout" src="img/white_home.png" width='32')
+            #patron-home
+                input#video-enable(type='checkbox' name='include-vi' value='vi_enabled' class="w3-check w3-margin-bottom")
+                | Enable Video Interpreter
+                input#transcriber-enable(type='checkbox' name='include-transcriber-vi' value='transcriber_vi_enabled' class="w3-check w3-margin-bottom")
+                | Enable Transcriber
+                button#joinsessionbtn(title='MCA App') Start
+            #patron-session-container
         include script
         include patron_script

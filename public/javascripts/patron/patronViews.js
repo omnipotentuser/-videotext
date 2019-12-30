@@ -1,4 +1,6 @@
-function TranscriberViews(){
+'use strict';
+
+function PatronViews(){
 
     // Enable data message passing through websocket
     // Defaults to DataChannel p2p delivery
@@ -10,7 +12,7 @@ function TranscriberViews(){
     var usewebsocket = function(e){
         e.preventDefault();
         var $lta = $('#local-ta');
-        if ($('.videochat-input-checkbox-wsmode').is(':checked')){
+        if ($('.patron-input-checkbox-wsmode').is(':checked')){
             $lta.val( $lta.val() + '\nDataChannel disabled, using WebSocket instead.\n');
             isrelay = true;
         } else {
@@ -21,17 +23,19 @@ function TranscriberViews(){
 
     var initialize = function(){
 
-        var clip = $('<div/>', {class:'videochat-layout-options'})
-            .append('<input type="text" class="videochat-input-text-clip" placeholder="Paste from clipboard"/>')
-            .append('<button class="videochat-btn-clip" title="Send to peers" type="submit"> send </button>');
-        var wstext = $('<div/>', {class:'videochat-layout-options'})
-            .append('<input type="checkbox" class="videochat-input-checkbox-wsmode" value="enable">Use WebSocket</input>');
+        var clip = $('<div/>', {class:'patron-layout-options'})
+            .append('<input type="text" class="patron-input-text-clip" placeholder="Paste from clipboard"/>')
+            .append('<button class="patron-btn-clip" title="Send to peers" type="submit"> send </button>');
+        
+        var wstext = $('<div/>', {class:'patron-layout-options'})
+            .append('<input type="checkbox" class="patron-input-checkbox-wsmode" value="enable">Use WebSocket</input>');
+
         $('<div/>', {id:'local-container', class:'media-layout'})
             .append('<video id=\"local-video\" autoplay playsinline controls muted>')
             .append(clip)
             .append(wstext)
             .append('<textarea id=\"local-ta\" placeholder="Begin typing in real time"></textarea>')
-            .appendTo('#videochat-video-container');
+            .appendTo('#patron-session-container');
 
         var $input = $('#roomnameinput');
         $input.focus();
@@ -41,7 +45,7 @@ function TranscriberViews(){
                 $('#joinroombtn').trigger("click");
             }
         });
-        $('.videochat-input-checkbox-wsmode').bind('change',usewebsocket);
+        $('.patron-input-checkbox-wsmode').bind('change',usewebsocket);
     };
 
     this.setListeners = function(engine){
@@ -75,9 +79,9 @@ function TranscriberViews(){
                 }
             }
         })
-        $('.videochat-btn-clip').on('click', function(event){
+        $('.patron-btn-clip').on('click', function(event){
             var ss = engine.sendString;
-            var $clipinput = $('.videochat-input-text-clip');
+            var $clipinput = $('.patron-input-text-clip');
             var word = $clipinput.val();
             if (word && word.length < 4){
                 window.alert('String is too shart. Has to be longer than 3 characters.');
@@ -88,20 +92,20 @@ function TranscriberViews(){
         });
     };
 
-    // TODO destroy videochat-btn-clip
+    // TODO destroy patron-btn-clip
     this.destroyListeners = function(){
-        $('.videochat-input-checkbox-wsmode').unbind('change',usewebsocket);
+        $('.patron-input-checkbox-wsmode').unbind('change',usewebsocket);
     };
 
     this.openMediaViews = function(){
-        $('#videochat-room-input').css('display','none');
-        $('#videochat-video-container').css('display','inline-block');
+        $('#patron-home').css('display','none');
+        $('#patron-session-container').css('display','inline-block');
     };
 
     this.closeMediaViews = function(){
-        $('#videochat-room-title').empty();
-        $('#videochat-video-container').fadeOut(function(){
-            $('#videochat-room-input').fadeIn( 200, function destroyCB(){
+        $('#patron-title').empty();
+        $('#patron-session-container').fadeOut(function(){
+            $('#patron-home').fadeIn( 200, function destroyCB(){
                 //destroyCallback(next);
                 console.log('ending videotext views connection');
             });
@@ -112,14 +116,14 @@ function TranscriberViews(){
 
     this.appendPeerMedia = function(pid){
         console.log('appendPeerMedia', pid);
-        var options = $('<div/>', {class:'videochat-layout-options'})
-            .append('<label class="videochat-label-bitrate">Bitrate: Not implemented yet.</label>');
+        var options = $('<div/>', {class:'patron-layout-options'})
+            .append('<label class="patron-label-bitrate">Bitrate: Not implemented yet.</label>');
         $('<div/>', {class:'media-layout'})
             .append('<video id="v'+pid+'" autoplay controls>')
             .append(options)
-            .append('<div class="videochat-layout-options"/>')
+            .append('<div class="patron-layout-options"/>')
             .append('<textarea id="ta-'+pid+'" class="remote-textarea" readonly></textarea>')
-            .appendTo('#videochat-video-container');
+            .appendTo('#patron-session-container');
         var $ml = $('.media-layout');
         var percent = (100 / $ml.length);
         $ml.css('width',percent+'%');
@@ -135,7 +139,7 @@ function TranscriberViews(){
     }
 
     this.deleteAllMedia = function(){
-        $('#videochat-video-container').empty(); 
+        $('#patron-session-container').empty(); 
     }
 
     this.updateTextArea = function(pid, bytechar){
@@ -152,7 +156,7 @@ function TranscriberViews(){
     }
 
     this.updateTitle = function(room){
-        $('#videochat-room-title').append('<p>Room: '+room+'</p>');
+        $('#patron-title').append('<p>Room: '+room+'</p>');
     }
 
     initialize();

@@ -167,6 +167,7 @@ function Peer(p_socket, p_id, p_roomName, iceConfig) {
     };
 
     var localDescCreated = function(desc){
+        console.log('localDescCreated: signalingState', pc.signalingState);
         if(pc.signalingState === 'closed')
 	        return;
         pc.setLocalDescription(desc, function() {
