@@ -4,7 +4,8 @@ function PatronViews(){
 
     // Enable data message passing through websocket
     // Defaults to DataChannel p2p delivery
-    var isrelay = false;
+    let isrelay = false;
+    let engine = null;
 
     var shiftKeyCode = {'192':'126', '49':'33', '50':'64', '51':'35', '52':'36', '53':'37', '54':'94', '55':'38', '56':'42', '57':'40', '48':'41', '189':'95', '187':'43', '219':'123', '221':'125', '220':'124', '186':'58', '222':'34', '188':'60', '190':'62', '191':'63'};
     var specialCharCode = {'8':'8', '13':'13', '32':'32', '186':'58', '187':'61', '188':'44', '189':'45', '190':'46', '191':'47', '192':'96', '219':'91', '220':'92', '221':'93', '222':'39'};
@@ -21,8 +22,21 @@ function PatronViews(){
         }
     };
 
-    var initialize = function(){
+    this.initialize = function(p_engine){
+        engine = p_engine;
+        $('#patron-home').css('display','none');
+        $('#patron-session-container').css('display','inline-block');
+    };
 
+    this.setVideoViews = function (){
+        $('<div/>', {id:'local-container', class:'media-layout'})
+            .appendTo('#patron-session-container');
+        $('#local-container')
+            .append('<video id=\"local-video\" autoplay playsinline controls muted>')
+    };
+
+    this.setTranscriberViews = function(){
+        console.log('set views listeners');
         var clip = $('<div/>', {class:'patron-layout-options'})
             .append('<input type="text" class="patron-input-text-clip" placeholder="Paste from clipboard"/>')
             .append('<button class="patron-btn-clip" title="Send to peers" type="submit"> send </button>');
@@ -30,26 +44,12 @@ function PatronViews(){
         var wstext = $('<div/>', {class:'patron-layout-options'})
             .append('<input type="checkbox" class="patron-input-checkbox-wsmode" value="enable">Use WebSocket</input>');
 
-        $('<div/>', {id:'local-container', class:'media-layout'})
-            .append('<video id=\"local-video\" autoplay playsinline controls muted>')
+        $('#local-container')
             .append(clip)
             .append(wstext)
             .append('<textarea id=\"local-ta\" placeholder="Begin typing in real time"></textarea>')
-            .appendTo('#patron-session-container');
 
-        var $input = $('#roomnameinput');
-        $input.focus();
-        $input.keypress(function(event){
-            if (event.which === 13){
-                event.preventDefault();
-                $('#joinroombtn').trigger("click");
-            }
-        });
         $('.patron-input-checkbox-wsmode').bind('change',usewebsocket);
-    };
-
-    this.setListeners = function(engine){
-        console.log('set views listeners');
         $('#local-ta').on('keydown', function textareaByteChar(e) {
             var sc = engine.sendChar;
             var code = (e.keyCode ? e.keyCode : e.which);
@@ -97,11 +97,6 @@ function PatronViews(){
         $('.patron-input-checkbox-wsmode').unbind('change',usewebsocket);
     };
 
-    this.openMediaViews = function(){
-        $('#patron-home').css('display','none');
-        $('#patron-session-container').css('display','inline-block');
-    };
-
     this.closeMediaViews = function(){
         $('#patron-title').empty();
         $('#patron-session-container').fadeOut(function(){
@@ -114,24 +109,34 @@ function PatronViews(){
         this.deleteAllMedia();
     };
 
-    this.appendPeerMedia = function(pid){
+    this.appendPeerMedia = function(pid, isTranscriberEnabled, isVideoEnabled){
         console.log('appendPeerMedia', pid);
-        var options = $('<div/>', {class:'patron-layout-options'})
-            .append('<label class="patron-label-bitrate">Bitrate: Not implemented yet.</label>');
-        $('<div/>', {class:'media-layout'})
-            .append('<video id="v'+pid+'" autoplay controls>')
-            .append(options)
-            .append('<div class="patron-layout-options"/>')
-            .append('<textarea id="ta-'+pid+'" class="remote-textarea" readonly></textarea>')
-            .appendTo('#patron-session-container');
+
+        let media = $('<div/>', {id:'m'+pid, class:'media-layout'});
+        if (isVideoEnabled && ! isTranscriberEnabled)
+            media.append('<video id="v'+pid+'" autoplay controls>');
+
+        else if (isTranscriberEnabled && ! isVideoEnabled){
+            
+            // Temporary to test Nodejs client media loop
+            media.append('<video id="v'+pid+'" autoplay controls>');
+            /////////////////////////////////////////////
+
+            media.append('<textarea id="ta-'+pid+'" class="remote-textarea" readonly></textarea>')
+        } else {
+            media.append('<video id="v'+pid+'" autoplay controls>');
+            media.append('<textarea id="ta-'+pid+'" class="remote-textarea" readonly></textarea>')
+        }
+
+        media.appendTo('#patron-session-container');
         var $ml = $('.media-layout');
         var percent = (100 / $ml.length);
         $ml.css('width',percent+'%');
         return true;
     }
 
-    this.deletePeerMedia = function(pid){
-        $('#v'+pid).parent().remove();
+    this.deletePeerMedia = function(pid, isTranscriberEnabled, isVideoEnabled){
+        $('#m'+pid).parent().remove();
         var $ml = $('.media-layout');
         var percent = (100 / $ml.length);
         $ml.css('width',percent+'%');
@@ -158,6 +163,4 @@ function PatronViews(){
     this.updateTitle = function(room){
         $('#patron-title').append('<p>Room: '+room+'</p>');
     }
-
-    initialize();
 }

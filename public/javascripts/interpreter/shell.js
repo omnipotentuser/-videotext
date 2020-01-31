@@ -15,7 +15,8 @@ $(document).ready(function(){
                     console.log('rtc engine connected');
                     rtc_engine.join({
                         room:roomName,
-                        userType:"interpreter"
+                        userType:"interpreter",
+                        videoEnabled: true
                     });
                     break;
                 case 'id':

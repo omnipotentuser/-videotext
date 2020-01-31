@@ -2,11 +2,15 @@
 /* globals RTCEngine:true, SessionsViews:true */
 
 $(document).ready(function(){
-    var rtc_engine = new RTCEngine();
+    let rtc_engine = new RTCEngine();
     let patronViews = new PatronViews();
-    var localId = null;
-    var startSessionBtn = $('#joinsessionbtn');
-    var exitSession = $('#exitsession');
+    let localId = null;
+    let startSessionBtn = $('#joinsessionbtn');
+    let exitSession = $('#exitsession');
+    let enableVideoCheck = $('#video-enable');
+    let enableTranscriberCheck = $('#transcriber-enable');
+    let isVideoEnabled = true; // default
+    let isTranscriberEnabled = false; // default
 
     var handleSocketEvents = function(signaler, data){
         if (signaler){
@@ -16,7 +20,12 @@ $(document).ready(function(){
                     console.log('rtc engine connected');
                     let roomName = "";
                     let userType = "patron";
-                    rtc_engine.join({room:roomName, userType:userType});
+                    rtc_engine.join({
+                        room:roomName,
+                        userType:userType,
+                        videoEnabled:isVideoEnabled,
+                        transcriberEnabled:isTranscriberEnabled
+                    });
                     break;
                 case 'id':
                     localId = data.id;
@@ -24,13 +33,18 @@ $(document).ready(function(){
                 case 'create':
                     pid = data.id;
                     console.log( 'creating new media element', pid);
-                    var created = patronViews.appendPeerMedia(pid);
-                    console.log('******* Was peer created?', created);
-                    return created;
+                    return patronViews.appendPeerMedia(
+                            pid, 
+                            isTranscriberEnabled,
+                            isVideoEnabled
+                        );
                     break;
                 case 'peerDisconnect':
                     pid = data.id;
                     patronViews.deletePeerMedia(data.id);
+                    break;
+                case 'readbytechar':
+                    patronViews.updateTextArea(data.from_id, data.code);
                     break;
                 case 'info':
                     console.log(data.msg);
@@ -53,10 +67,27 @@ $(document).ready(function(){
     var handleStartSession = function(event){
 
         event.preventDefault();
-        
-        patronViews.setListeners(rtc_engine);
-        patronViews.openMediaViews();
-        console.log('starting rtc engine');
+
+        isTranscriberEnabled = enableTranscriberCheck.is(':checked');
+        isVideoEnabled = enableVideoCheck.is(':checked');
+
+        if (!isTranscriberEnabled && !isVideoEnabled){
+            window.alert('Cannot start without at least one box checked');
+            return;
+        }
+
+        patronViews.initialize(rtc_engine);
+
+        // video view has to be called first if enabled
+        // if (isVideoEnabled) handleVideoEnabled();
+
+        // temporary always on to set media video loop
+        // delete this call after test is done. Re-enable
+        // the conditional isVideoEnabled above
+        handleVideoEnabled();
+
+        //if (isTranscriberEnabled) handleTranscriberEnabled();
+
         rtc_engine.connect(handleSocketEvents);
 
         startSessionBtn.unbind('click', handleStartSession);
@@ -71,8 +102,17 @@ $(document).ready(function(){
         location.href = "/patron";
     };
 
+    let handleVideoEnabled = function(){
+        patronViews.setVideoViews();
+    };
+
+    let handleTranscriberEnabled = function(){
+        patronViews.setTranscriberViews();
+    };
+
     exitSession.bind('click', handleExitBtn);
     startSessionBtn.bind('click', handleStartSession);
+
 
 })
 

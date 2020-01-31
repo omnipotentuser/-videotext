@@ -6,6 +6,8 @@ function RTCEngine(){
         , socket = null
         , roomName = null
         , userType = null
+        , videoEnabled = null
+        , transcriberEnabled = null
         , localStream = null
         , localId = null
         , stunOn = true
@@ -20,11 +22,27 @@ function RTCEngine(){
         if (data){
             roomName = data.room ? data.room : "limbo";
             userType = data.userType ? data.userType : "beggar";
+            videoEnabled = data.videoEnabled ? data.videoEnabled : false;
+            transcriberEnabled = data.transcriberEnabled ? data.transcriberEnabled : false;
         }
-        const media_constraints = window.constraints = {
-            video : true
-            , audio : true
-        };
+
+        console.log('userType:', userType, 'videoEnabled:', videoEnabled);
+        const media_constraints = window.constraints = (function(videoEnabled, transcriberEnabled){
+            let constraints = {};
+            if (videoEnabled && transcriberEnabled){
+                constraints.video = true;
+                constraints.audio = true;
+            } else if (videoEnabled){
+                constraints.video = true;
+                constraints.audio = true;
+            } else {
+                constraints.audio = true;
+            }
+
+            return constraints;
+        })(videoEnabled, transcriberEnabled);
+
+        console.log('media_constraints', media_constraints);
 
         // getUserMedia
         try {
@@ -32,19 +50,21 @@ function RTCEngine(){
             .then(function(stream){
 
                 const videoTracks = stream.getVideoTracks();
-                console.log('Got stream with constraints:', constraints);
+                console.log('Got stream with constraints:', media_constraints);
                 console.log(`Using video device: ${videoTracks[0].label}`);
 
                 localStream = stream;
                 window.stream = stream;
-                var video = document.querySelector('#local-video');
+                let video = document.querySelector('#local-video');
                 video.srcObject = stream;
                 console.log('joining', roomName);
                 console.log('using the userType', userType);
-                var info = {
+                let info = {
                     room: roomName
                     , stunOn: stunOn
                     , userType: userType
+                    , videoEnabled: videoEnabled
+                    , transcriberEnabled: transcriberEnabled
                 };
                 socket.emit('join', info);
             })
@@ -196,7 +216,7 @@ function RTCEngine(){
     async function createPeers(users, ice, callback) {
         var pid = users.shift();
         console.log('Shifting to next peer.');
-        if(callback('create', {id:pid})){
+        if(await callback('create', {id:pid})){
             console.log('createPeers iceConfig: ', ice);
             var peer = new Peer(socket, pid, roomName, ice);
             peer.buildClient(localStream, handleByteChar, 'answer');
