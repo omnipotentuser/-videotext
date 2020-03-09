@@ -97,29 +97,6 @@ function RTCEngine(){
         }
     }
 
-    // data = {room:room, isLocked:isLocked, password:password}
-    //
-    function createRoom(data){
-        if (socket){
-
-            if (data.isLocked)
-                isLocked = data.isLocked;
-            if (data.password)
-                password = data.password;
-            if (data.room)
-                roomName = data.room;
-
-            socket.emit('createRoom', data);
-        }
-    }
-
-    function getRooms(){
-        console.log('rtcengine getRooms');
-        if (socket){
-            socket.emit('getRooms');
-        }
-    }
-
     function sendChar(code, isrelay){
         if (roomName){
             var message = {
@@ -193,9 +170,30 @@ function RTCEngine(){
         });
     }
 
-    function handleCreatePeers(socket,callback) {
+    function handleCreateTranscriberPeers(socket, callback){
+
         if (typeof callback === 'undefined') callback = function(){};
-        socket.on('createPeers', function(message){
+        socket.on('createTranscriberPeers', function(message){
+            console.log('socket received createPeers signal');
+            var users = message.users;
+            var len = message.len;
+
+            if (typeof message.roomName !== 'undefined' && message.roomName !== null){
+                if( message.roomName !== roomName){
+                    roomName = message.roomName;
+                }
+            }
+            var ice = message.ice ? message.ice : iceConfig;
+            console.log('handleCreatePeers users:', users);
+            if(users.length > 0)
+                createPeers(users, ice, callback);
+            socket.emit('broadcastJoin', {room:roomName, stunOn: stunOn});
+        });
+    }
+
+    function handleCreateVideoPeers(socket,callback) {
+        if (typeof callback === 'undefined') callback = function(){};
+        socket.on('createVideoPeers', function(message){
             console.log('socket received createPeers signal');
             var users = message.users;
             var len = message.len;
@@ -383,7 +381,8 @@ function RTCEngine(){
             handleDeleteRoom(socket, callback);
             handleAddRoom(socket, callback);
             handleJoinRoom(socket, callback);
-            handleCreatePeers(socket, callback);
+            handleCreateVideoPeers(socket, callback);
+            handleCreateTranscriberPeers(socket, callback);
             handleCreateOffer(socket, callback);
             handleIceCandidate(socket);
             handleSetRemoteDescription(socket);
@@ -421,8 +420,6 @@ function RTCEngine(){
         join:startMedia, 
         leave:stopMedia, 
         closeLocalMedia:closeLocalMedia,
-        createRoom:createRoom,
-        getRooms:getRooms,
         sendChar:sendChar,
         sendString:sendString
     };

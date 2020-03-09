@@ -19,12 +19,6 @@ const query = util.promisify(pool.query).bind(pool);
 
 var crypto = require('crypto');
 
-var Users = [];
-
-var genRandomString = function(length){
-    return crypto.randomBytes(Math.ceil(length/2)).toString('hex').slice(0,length);
-};
-
 var sha512 = function(password, salt){
     var hash = crypto.createHmac('sha512', salt);
     hash.update(password);
@@ -35,23 +29,6 @@ var sha512 = function(password, salt){
     };
 
 };
-
-
-var salted = genRandomString(16);
-var hashedpw = sha512('nick', salted);
-var addUserParam = ['nick', hashedpw.passwordHash, salted];
-
-// example of getting salt and hash
-function saltHashPassword(userpw){
-    var salt = genRandomString(16);
-    var pwData = sha512(usrpw, salt);
-};
-
-
-
-// temporary
-Users.push({uname: "nick", psw: "nick"});
-
 
 var sessionChecker = (req, res, next) => {
     if (req.session.user && req.cookies.user_sid){
@@ -137,23 +114,6 @@ router.post('/login', function(req, res, next) {
             }
 
         })();
-
-        /*
-        Users.filter(function(user){
-            console.log('user.uname='+user.uname+", user.psw="+user.psw);
-
-            // THIS IS WHERE WE ENTER LOGIC TO DETERMINE WHO IS WHO
-            // IF INTERPRETER, LOGIN TO VIDEOCHAT APP, ELSE PATRON MENU
-            //
-            if(user.uname === req.body.uname && user.psw === req.body.psw){
-                console.log('login creds matches');
-                req.session.user = user;
-                res.redirect('/videochat');
-            } else {
-                res.status(404).send({msg: "credentials failed"});
-            }
-        });
-        */
     }
 });
 
@@ -165,18 +125,6 @@ router.get('/logout', function(req, res, next) {
         res.redirect("/login");
     } else {
         res.redirect("/login");
-    }
-});
-
-router.get('/videochat', function(req, res, next) {
-    console.log('requesting videochat');
-    console.log('user_sid=%s', req.cookies.user_sid);
-    console.log('session user=%s', JSON.stringify(req.session));
-    if (req.session.user && req.cookies.user_sid){
-        console.log('rendering videochat');
-        res.render('videochat');
-    } else {
-        res.redirect('/login');
     }
 });
 
@@ -203,23 +151,6 @@ router.get('/patron', function(req, res, next) {
     } else {
         res.redirect('/login');
     }
-});
-
-// LOGIN-FREE videotext
-router.get('/vc', function(req, res, next) {
-    console.log('requesting member-free videochat');
-    console.log('rendering videochat');
-    res.render('videochat');
-});
-
-// LOGIN-FREE videophone
-router.get('/vp', function(req, res, next) {
-    console.log('requesting member-free videophone');
-    console.log('rendering videophone');
-    res.render('videophone');
-});
-router.get('/vpexit', function(req, res, next) {
-    res.redirect("/vp");
 });
 
 
