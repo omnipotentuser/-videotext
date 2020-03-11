@@ -133,24 +133,30 @@ router.get('/interpreter', function(req, res, next) {
     console.log('requesting interpreter app');
     console.log('user_sid=%s', req.cookies.user_sid);
     console.log('session user=%s', JSON.stringify(req.session));
+    res.render('interpreter');
+    /*
     if (req.session.user && req.cookies.user_sid){
         console.log('rendering interpreter app');
         res.render('interpreter');
     } else {
         res.redirect('/login');
     }
+    */
 });
 
 router.get('/patron', function(req, res, next) {
     console.log('requesting patron app');
     console.log('user_sid=%s', req.cookies.user_sid);
     console.log('session user=%s', JSON.stringify(req.session));
+    res.render('patron');
+    /*
     if (req.session.user && req.cookies.user_sid){
         console.log('rendering patron app');
         res.render('patron');
     } else {
         res.redirect('/login');
     }
+    */
 });
 
 
