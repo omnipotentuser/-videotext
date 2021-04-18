@@ -26,14 +26,26 @@ function RTCEngine(){
             password = data.password;
             console.log('password', password);
         }
-        const media_constraints = window.constraints = {
+        const defaultConstraints = window.constraints = {
             video : true
             , audio : true
         };
 
+        const hdConstraints = {
+            video: { width: { min: 1280 }, height: { min: 720 } },
+        };
+
+        const vgaConstraints = {
+            video: { width: { exact: 640 }, height: { exact: 480 } },
+        };
+
+        const qvgaConstraints = {
+            video: { width: { exact: 320 }, height: { exact: 240 } },
+        };
+
         // getUserMedia
         try {
-            navigator.mediaDevices.getUserMedia(media_constraints)
+            navigator.mediaDevices.getUserMedia(qvgaConstraints)
             .then(function(stream){
 
                 const videoTracks = stream.getVideoTracks();
