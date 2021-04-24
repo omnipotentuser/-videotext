@@ -32,15 +32,18 @@ function RTCEngine(){
         };
 
         const hdConstraints = {
-            video: { width: { min: 1280 }, height: { min: 720 } },
+            video: { width: { min: 1280 }, height: { min: 720 } }
+            , audio : true
         };
 
         const vgaConstraints = {
-            video: { width: { exact: 640 }, height: { exact: 480 } },
+            video: { width: { exact: 640 }, height: { exact: 480 } }
+            , audio : true
         };
 
         const qvgaConstraints = {
-            video: { width: { exact: 320 }, height: { exact: 240 } },
+            video: { width: { exact: 320 }, height: { exact: 240 } }
+            , audio : true
         };
 
         // getUserMedia
